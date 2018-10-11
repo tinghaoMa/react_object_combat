@@ -15,7 +15,7 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props)
         this.state = {
-            selectedTab: 'home'
+            selectedTab: 'tab_popular'
         }
     }
 
@@ -24,38 +24,52 @@ export default class App extends Component<Props> {
             <View style={styles.container}>
                 <TabNavigator>
                     <TabNavigator.Item
-                        selected={this.state.selectedTab === 'home'}
+                        selected={this.state.selectedTab === 'tab_popular'}
                         selectedTitleStyle={{color: 'red'}}
-                        title="Home"
+                        title="最热"
                         renderIcon={() => <Image style={styles.image} source={require('./res/images/ic_polular.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]}
                                                          source={require('./res/images/ic_polular.png')}/>}
                         badgeText="2"
-                        onPress={() => this.setState({selectedTab: 'home'})}>
+                        onPress={() => this.setState({selectedTab: 'tab_popular'})}>
                         <View style={styles.page1}/>
                     </TabNavigator.Item>
+
                     <TabNavigator.Item
-                        selected={this.state.selectedTab === 'profile'}
+                        selected={this.state.selectedTab === 'tab_trending'}
                         selectedTitleStyle={{color: 'blue'}}
-                        title="Profile"
+                        title="趋势"
                         renderIcon={() => <Image style={styles.image}
                                                  source={require('./res/images/ic_trending.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'blue'}]}
                                                          source={require('./res/images/ic_trending.png')}/>}
-                        onPress={() => this.setState({selectedTab: 'profile'})}>
+                        onPress={() => this.setState({selectedTab: 'tab_trending'})}>
                         <View style={styles.page2}/>
                     </TabNavigator.Item>
 
                     <TabNavigator.Item
-                        selected={this.state.selectedTab === 'tab_3'}
+                        selected={this.state.selectedTab === 'tab_favorite'}
                         selectedTitleStyle={{color: 'orange'}}
-                        title="tab_3"
+                        title="收藏"
                         renderIcon={() => <Image style={styles.image}
                                                  source={require('./res/images/ic_favorite.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'orange'}]}
                                                          source={require('./res/images/ic_favorite.png')}/>}
-                        onPress={() => this.setState({selectedTab: 'tab_3'})}>
+                        onPress={() => this.setState({selectedTab: 'tab_favorite'})}>
                         <View style={styles.page3}/>
+                    </TabNavigator.Item>
+
+
+                    <TabNavigator.Item
+                        selected={this.state.selectedTab === 'tab_my'}
+                        selectedTitleStyle={{color: 'gray'}}
+                        title="我的"
+                        renderIcon={() => <Image style={styles.image}
+                                                 source={require('./res/images/ic_my.png')}/>}
+                        renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'gray'}]}
+                                                         source={require('./res/images/ic_my.png')}/>}
+                        onPress={() => this.setState({selectedTab: 'tab_my'})}>
+                        <View style={styles.page4}/>
                     </TabNavigator.Item>
                 </TabNavigator>
             </View>
@@ -79,6 +93,10 @@ const styles = StyleSheet.create({
     page3: {
         flex: 1,
         backgroundColor: 'orange'
+    },
+    page4: {
+        flex: 1,
+        backgroundColor: 'gray'
     },
     image: {
         width: 22,
