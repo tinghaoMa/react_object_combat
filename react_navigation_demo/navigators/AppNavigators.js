@@ -8,10 +8,16 @@ import {
     StackNavigator,
     createStackNavigator,
 } from 'react-navigation'
+import React from 'react';
+import {
+    Button
+} from 'react-native'
+
 
 import HomePage from '../pages/HomePage';
 import Page1 from '../pages/Page1';
 import Page2 from '../pages/Page2';
+import Page3 from '../pages/Page3';
 
 export const AppStackNavigator = createStackNavigator({
         HomePage: {
@@ -31,6 +37,26 @@ export const AppStackNavigator = createStackNavigator({
             navigationOptions: () => ({
                 title: 'Page2',
             }),
+        },
+        Page3: {
+            screen: Page3,
+            navigationOptions: (props) => {
+                const {navigation} = props;
+                const {state, setParams} = navigation;
+                const {params} = state;
+
+                return {
+                    title: params.title ? params.title : 'Page3',
+                    headerRight: (
+                        <Button
+                            title={params.mode === 'edit' ? '保存' : '编辑'}
+                            onPress={() => {
+                                setParams({mode: params.mode === 'edit' ? '' : 'edit'})
+                            }}
+                        />
+                    )
+                }
+            },
         },
 
     }, {

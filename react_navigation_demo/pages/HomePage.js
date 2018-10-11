@@ -19,7 +19,8 @@ type Props = {};
 export default class HomePage extends Component<Props> {
 
     static navigationOptions={
-        title:'hello world'
+        title:'hello world',
+        headerBackTitle:'返回哈哈',
     }
 
     render() {
@@ -39,6 +40,12 @@ export default class HomePage extends Component<Props> {
                     title='Go To Page2'
                     onPress={()=>{
                         navigation.navigate('Page2')
+                    }}
+                ></Button>
+                <Button
+                    title='Go To Page3'
+                    onPress={()=>{
+                        navigation.navigate('Page3',{title:'hello world',name:'thm react native'})
                     }}
                 ></Button>
             </View>
