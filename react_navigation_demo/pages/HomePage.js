@@ -32,7 +32,7 @@ export default class HomePage extends Component<Props> {
                 <Button
                     title='Go To Page1'
                     onPress={()=>{
-                        navigation.navigate('Page1')
+                        navigation.navigate('Page1',{name:'动态的'})
                     }}
                 ></Button>
                 <Button
