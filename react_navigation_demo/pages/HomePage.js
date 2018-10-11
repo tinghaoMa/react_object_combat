@@ -17,6 +17,11 @@ import {
 
 type Props = {};
 export default class HomePage extends Component<Props> {
+
+    static navigationOptions={
+        title:'hello world'
+    }
+
     render() {
         const {navigation}=this.props;
         return (

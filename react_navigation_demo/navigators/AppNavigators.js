@@ -15,26 +15,27 @@ import Page2 from '../pages/Page2';
 
 export const AppStackNavigator = createStackNavigator({
         HomePage: {
-            screen: HomePage
+            screen: HomePage,
+            // navigationOptions: () => ({
+            //     title: 'HomePage',
+            // }),
         },
         Page1: {
             screen: Page1,
-            // navigationOptions: () => ({
-            //     title: 'Page1',
-            //     headerBackTitle: null
-            // }),
+            navigationOptions: () => ({
+                title: 'Page1',
+            }),
         },
         Page2: {
             screen: Page2,
-            // navigationOptions: () => ({
-            //     title: 'Page2',
-            //     headerBackTitle: null
-            // }),
+            navigationOptions: () => ({
+                title: 'Page2',
+            }),
         },
 
     }, {
         navigationOptions: {
-            header: null,
+            // header: null,
         }
     }
 );
