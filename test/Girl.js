@@ -25,8 +25,15 @@ export default class Girl extends Component {
                     I am girl
                 </Text>
                 <Text style={styles.text}>
-                    {this.props.word}
+                   我收到了男孩收到的 {this.props.word}
                 </Text>
+
+                <Text style={styles.text}
+                      onPress={()=>{
+                           this.props.onCallBack('一盒巧盒力');
+                           this.props.navigator.pop() //返回上一级页面
+                      }}
+                >送巧克力给男孩</Text>
             </View>
         )
     }

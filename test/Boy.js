@@ -28,9 +28,9 @@ export default class Boy extends Component{
                 </Text>
                 <Text style={styles.text}
                       onPress={()=>{
-                          this.props.navigator.push({
+                          this.props.navigator.push({ //跳转到下一级页面
                                 component:Girl,
-                                params:{
+                                params:{ //传递的数据
                                     word:'一枝玫瑰',
                                     onCallBack:(word)=>{
                                         this.setState({
@@ -42,7 +42,7 @@ export default class Boy extends Component{
                       }}
                 >送女孩一枝玫瑰</Text>
                 <Text style={styles.text}>
-                    {this.state.word}
+                    收到女孩送的礼物--{this.state.word}
                 </Text>
             </View>
         )
@@ -52,11 +52,11 @@ export default class Boy extends Component{
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'white',
+        backgroundColor:'gray',
         justifyContent:'center'
     },
     text:{
         fontSize:20,
-        color:'green'
+        color:'blue'
     }
 });
