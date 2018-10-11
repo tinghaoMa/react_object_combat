@@ -8,7 +8,10 @@
 
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
 import TabNavigator from 'react-native-tab-navigator';
+
+import Boy from './test/Boy'
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -22,6 +25,7 @@ export default class App extends Component<Props> {
     render() {
         return (
             <View style={styles.container}>
+                {/*
                 <TabNavigator>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tab_popular'}
@@ -71,7 +75,17 @@ export default class App extends Component<Props> {
                         onPress={() => this.setState({selectedTab: 'tab_my'})}>
                         <View style={styles.page4}/>
                     </TabNavigator.Item>
-                </TabNavigator>
+                 </TabNavigator>*/}
+                <Navigator
+                    initialRoute = {{
+                        component:Boy
+                    }}
+                    renderScene={(route, navigator)=>{
+                            let Component = route.component;
+                            return <Component navigator={navigator}{...route.params} />
+                        }
+                    }
+                ></Navigator>
             </View>
         );
     }
