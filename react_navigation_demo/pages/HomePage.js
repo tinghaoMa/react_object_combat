@@ -21,6 +21,13 @@ export default class HomePage extends Component<Props> {
     static navigationOptions={
         title:'hello world',
         headerBackTitle:'返回哈哈',
+        headerStyle: {
+            backgroundColor: '#f4511e',
+        },
+        headerTintColor: 'yellow',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
     }
 
     render() {
@@ -39,7 +46,7 @@ export default class HomePage extends Component<Props> {
                 <Button
                     title='Go To Page2'
                     onPress={()=>{
-                        navigation.navigate('Page2')
+                        navigation.navigate('Page2',{test:'hello'})
                     }}
                 ></Button>
                 <Button

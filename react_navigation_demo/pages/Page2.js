@@ -17,14 +17,16 @@ import {
 export default class Page2 extends Component {
     render() {
         const {navigation} = this.props;
+        const testValue = navigation.getParam('test', 'default value');
+        const nullValue = navigation.getParam('no', 'default value');
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
-                    欢迎来到 Page2
+                    欢迎来到 Page2 {testValue} {nullValue}
                 </Text>
                 <Button
                     title='Go Back'
-                    onPress={()=>{
+                    onPress={() => {
                         navigation.goBack();
                     }}
                 />
