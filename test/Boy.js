@@ -3,41 +3,48 @@
  * @time 2018/10/11 11:13 AM
  * @class describe
  */
- import  React,{Component} from 'react';
- import {
-     View,
-     Text,
-     StyleSheet
- }  from 'react-native';
+import React, {Component} from 'react';
+import {
+    View,
+    Text,
+    StyleSheet
+} from 'react-native';
 
- import Girl from './Girl'
+import Girl from './Girl'
+import NavigationBar from './NavigationBar'
 
-export default class Boy extends Component{
-    constructor(props){
+export default class Boy extends Component {
+    constructor(props) {
         super(props);
-        this.state={
-            word:''
+        this.state = {
+            word: ''
         }
     }
 
-    render(){
+    render() {
         return (
             <View style={styles.container}>
+                <NavigationBar
+                    title={'Boy'}
+                    statusBar={{
+                        backgroundColor:'red',
+                    }}
+                />
                 <Text style={styles.text}>
                     I am boy
                 </Text>
                 <Text style={styles.text}
-                      onPress={()=>{
+                      onPress={() => {
                           this.props.navigator.push({ //跳转到下一级页面
-                                component:Girl,
-                                params:{ //传递的数据
-                                    word:'一枝玫瑰',
-                                    onCallBack:(word)=>{
-                                        this.setState({
-                                            word:word
-                                        });
-                                    }
-                                }
+                              component: Girl,
+                              params: { //传递的数据
+                                  word: '一枝玫瑰',
+                                  onCallBack: (word) => {
+                                      this.setState({
+                                          word: word
+                                      });
+                                  }
+                              }
                           })
                       }}
                 >送女孩一枝玫瑰</Text>
@@ -50,13 +57,12 @@ export default class Boy extends Component{
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'gray',
-        justifyContent:'center'
+    container: {
+        flex: 1,
+        backgroundColor: 'gray',
     },
-    text:{
-        fontSize:20,
-        color:'blue'
+    text: {
+        fontSize: 20,
+        color: 'blue'
     }
 });
