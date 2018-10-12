@@ -18,9 +18,9 @@ import {
 type Props = {};
 export default class HomePage extends Component<Props> {
 
-    static navigationOptions={
-        title:'hello world',
-        headerBackTitle:'返回哈哈',
+    static navigationOptions = {
+        title: 'hello world',
+        headerBackTitle: '返回哈哈',
         headerStyle: {
             backgroundColor: '#f4511e',
         },
@@ -31,7 +31,7 @@ export default class HomePage extends Component<Props> {
     }
 
     render() {
-        const {navigation}=this.props;
+        const {navigation} = this.props;
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
@@ -39,26 +39,32 @@ export default class HomePage extends Component<Props> {
                 </Text>
                 <Button
                     title='Go To Page1'
-                    onPress={()=>{
-                        navigation.navigate('Page1',{name:'动态的'})
+                    onPress={() => {
+                        navigation.navigate('Page1', {name: '动态的'})
                     }}
                 ></Button>
                 <Button
                     title='Go To Page2'
-                    onPress={()=>{
-                        navigation.navigate('Page2',{test:'hello'})
+                    onPress={() => {
+                        navigation.navigate('Page2', {test: 'hello'})
                     }}
                 ></Button>
                 <Button
                     title='Go To Page3'
-                    onPress={()=>{
-                        navigation.navigate('Page3',{title:'hello world',name:'thm react native'})
+                    onPress={() => {
+                        navigation.navigate('Page3', {title: 'hello world', name: 'thm react native'})
                     }}
                 ></Button>
                 <Button
                     title='Go To TabNavigator'
-                    onPress={()=>{
+                    onPress={() => {
                         navigation.navigate('TabNav')
+                    }}
+                ></Button>
+                <Button
+                    title='Go To DrawerNavigator'
+                    onPress={() => {
+                        navigation.navigate('DrawNav')
                     }}
                 ></Button>
             </View>

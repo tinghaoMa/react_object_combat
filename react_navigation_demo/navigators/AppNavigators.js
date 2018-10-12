@@ -6,6 +6,7 @@
 
 import {
     createStackNavigator,
+    createDrawerNavigator,
 } from 'react-navigation'
 
 import {createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
@@ -15,11 +16,14 @@ import {
     Button
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import HomePage from '../pages/HomePage';
 import Page1 from '../pages/Page1';
 import Page2 from '../pages/Page2';
 import Page3 from '../pages/Page3';
+import Page4 from '../pages/Page4';
+import Page5 from '../pages/Page5';
 
 class TabBarComponent extends React.Component {
 
@@ -45,6 +49,42 @@ class TabBarComponent extends React.Component {
     }
 }
 
+
+
+export const DrawerNav=createDrawerNavigator({
+
+    Page4:{
+        screen:Page4,
+        navigationOptions:{
+            drawerLabel:'Page4',
+            drawerIcon:(({tintColor})=>(
+                <MaterialIcons
+                    name={'drafts'}
+                    size={24}
+                    style={{color:tintColor}}
+                />
+            ))
+        }
+    },
+
+    Page5:{
+        screen:Page5,
+        navigationOptions:{
+            drawerLabel:'Page5',
+            drawerIcon:(({tintColor})=>(
+                <MaterialIcons
+                    name={'drafts'}
+                    size={24}
+                    style={{color:tintColor}}
+                />
+            ))
+        }
+    },
+
+},{
+    initialRouteName: 'Page4',
+    drawerWidth: 300
+});
 
 export const AppTabNavigator = createBottomTabNavigator({
     Page1: {
@@ -155,6 +195,12 @@ export const AppStackNavigator = createStackNavigator({
             screen: AppTabNavigator,
             navigationOptions: {
                 title: 'This is TabNavigator'
+            }
+        } ,
+        DrawNav: {
+            screen: DrawerNav,
+            navigationOptions: {
+                title: 'This is DrawNav'
             }
         }
 
