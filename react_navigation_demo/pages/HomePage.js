@@ -55,6 +55,12 @@ export default class HomePage extends Component<Props> {
                         navigation.navigate('Page3',{title:'hello world',name:'thm react native'})
                     }}
                 ></Button>
+                <Button
+                    title='Go To TabNavigator'
+                    onPress={()=>{
+                        navigation.navigate('TabNav')
+                    }}
+                ></Button>
             </View>
         );
     }

@@ -108,6 +108,13 @@ export const AppStackNavigator = createStackNavigator({
             },
         },
 
+        TabNav:{
+            screen:AppTabNavigator,
+            navigationOptions:{
+                title:'This is TabNavigator'
+            }
+        }
+
     }, {
         navigationOptions: {
             // header: null,

@@ -8,4 +8,4 @@
 
 import {AppStackNavigator,AppTabNavigator} from "./navigators/AppNavigators";
 
-export default AppTabNavigator;
+export default AppStackNavigator;
