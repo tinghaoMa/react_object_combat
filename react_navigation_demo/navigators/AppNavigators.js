@@ -85,20 +85,28 @@ export const AppTabNavigator = createBottomTabNavigator({
                     size={26}
                     style={{color: tintColor}}
                 />
-            )
+            ),
+            // tabBarOnPress:()=>{
+            //     console.log('11111111')
+            // }
         }
     }
 }, {
     tabBarComponent:TabBarComponent,
     tabBarOptions: {
         activeTintColor: 'green',
+        activeBackgroundColor:'gray',
         labelStyle: {
             fontSize: 12,
         },
         // style: {
-        //     backgroundColor: 'blue',
+        //     backgroundColor: 'yellow',
         // },
-    }
+        inactiveTintColor:'red'
+    },
+    // navigationOptions:{
+    //     tabBarVisible:false,
+    // }
 });
 
 export const AppStackNavigator = createStackNavigator({
