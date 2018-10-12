@@ -6,6 +6,6 @@
  * @flow
  */
 
-import {AppStackNavigator} from "./navigators/AppNavigators";
+import {AppStackNavigator,AppTabNavigator} from "./navigators/AppNavigators";
 
-export default AppStackNavigator;
+export default AppTabNavigator;
