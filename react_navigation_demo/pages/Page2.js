@@ -31,6 +31,12 @@ export default class Page2 extends Component {
                     }}
                 />
                 <Button
+                    title='Go Back Page1'
+                    onPress={() => {
+                        navigation.navigate('Page1');
+                    }}
+                />
+                <Button
                     title='改变主题'
                     onPress={()=>{
                         navigation.setParams({
