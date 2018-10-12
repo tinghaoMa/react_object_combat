@@ -6,9 +6,10 @@
 
 import {
     createStackNavigator,
-    createTabNavigator,
-    createBottomTabNavigator
 } from 'react-navigation'
+
+import {createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
+
 import React from 'react';
 import {
     Button
@@ -19,6 +20,31 @@ import HomePage from '../pages/HomePage';
 import Page1 from '../pages/Page1';
 import Page2 from '../pages/Page2';
 import Page3 from '../pages/Page3';
+
+class TabBarComponent extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.theme = {
+            tintColor: this.props.activeTintColor,
+            updateTime: new Date().getTime(),
+        }
+    }
+
+    render() {
+        const {routes, index} = this.props.navigation.state;
+        const {theme} = routes[index].params?routes[index].params:this.theme;
+        if (theme && theme.updateTime > this.theme.updateTime) {
+            this.theme = theme;
+        }
+
+        return <BottomTabBar
+            {...this.props}
+            activeTintColor={this.theme.tintColor || this.props.activeTintColor}
+        />
+    }
+}
+
 
 export const AppTabNavigator = createBottomTabNavigator({
     Page1: {
@@ -62,8 +88,17 @@ export const AppTabNavigator = createBottomTabNavigator({
             )
         }
     }
-
-
+}, {
+    tabBarComponent:TabBarComponent,
+    tabBarOptions: {
+        activeTintColor: 'green',
+        labelStyle: {
+            fontSize: 12,
+        },
+        // style: {
+        //     backgroundColor: 'blue',
+        // },
+    }
 });
 
 export const AppStackNavigator = createStackNavigator({
@@ -108,10 +143,10 @@ export const AppStackNavigator = createStackNavigator({
             },
         },
 
-        TabNav:{
-            screen:AppTabNavigator,
-            navigationOptions:{
-                title:'This is TabNavigator'
+        TabNav: {
+            screen: AppTabNavigator,
+            navigationOptions: {
+                title: 'This is TabNavigator'
             }
         }
 
