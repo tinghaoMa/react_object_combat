@@ -13,6 +13,7 @@ import {
     View,
     FlatList,
     RefreshControl,
+    ActivityIndicator,
 } from 'react-native';
 
 const CITY_NAMES = () => {
@@ -60,11 +61,19 @@ export default class FlatListDemo extends Component {
                             refreshing={this.state.isLoading}
                             onRefresh={
                                 () => {
-                                    this._loadData();
+                                    this._loadData(true);
                                 }
                             }
                         />
                     }
+
+                    ListFooterComponent={() => {
+                        return this._genIndicator();
+                    }}
+
+                    onEndReached={()=>{this._loadData(false)}}
+
+
                 />
             </View>
         );
@@ -76,20 +85,46 @@ export default class FlatListDemo extends Component {
         </View>;
     }
 
-    _loadData() {
-        this.setState({
-            isLoading: true,
-        });
-        setTimeout(() => {
-            let citys = [];
-            for (let i = 0; i < 3; i++) {
-                citys.push({key: i + '', value: '第1' + i + '1个城市'})
-            }
+    _loadData(pullRefresh) {
+        if(pullRefresh){
             this.setState({
-                isLoading: false,
-                dataArray: citys,
-            })
-        }, 2000);
+                isLoading: true,
+            });
+            setTimeout(() => {
+                let citys = [];
+                for (let i = 0; i < 3; i++) {
+                    citys.push({key: i + '', value: '第1' + i + '1个城市'})
+                }
+                this.setState({
+                    isLoading: false,
+                    dataArray: citys,
+                })
+            }, 2000);
+        }else{
+            setTimeout(()=>{
+                let citys = [];
+                for (let i = 0; i < 3; i++) {
+                    citys.push({key: i + '', value: '加载更多 第1' + i + '1个城市'})
+                }
+                citys=this.state.dataArray.concat(citys);
+                this.setState({
+                    isLoading: false,
+                    dataArray: citys,
+                })
+            },2000);
+        }
+
+    }
+
+    _genIndicator() {
+        return <View style={styles.indicator}>
+            <ActivityIndicator
+                size='large'
+                color='red'
+                animating={true}
+            />
+            <Text style={styles.welcome}>正在加载更多....</Text>
+        </View>
     }
 }
 
@@ -117,5 +152,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    indicator:{
+        flexDirection:'row',
+        justifyContent:'center',
+
     }
 });
