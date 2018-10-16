@@ -7,6 +7,7 @@ import SwipeableFlatListDemo from './pages/SwipeableFlatListDemo';
 import {name as appName} from './app.json';
 
 import {createStackNavigator} from 'react-navigation'
+import SectionListDemo from "./pages/ScetionListDemo";
 
 const AppRoot = createStackNavigator({
 
@@ -27,6 +28,12 @@ const AppRoot = createStackNavigator({
         screen: SwipeableFlatListDemo,
         navigationOptions: {
             title: 'SwipeableFlatListDemo'
+        }
+    },
+    SectionListDemo: {
+        screen: SectionListDemo,
+        navigationOptions: {
+            title: 'SectionListDemo'
         }
     }
 

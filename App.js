@@ -24,6 +24,14 @@ export default class App extends Component {
                         navigation.navigate('SwipeableFlatListDemo');
                     }}
                 >click me go to SwipeableFlatListDemo page</Text>
+
+
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        navigation.navigate('SectionListDemo');
+                    }}
+                >click me go to SectionListDemo page</Text>
             </View>
         );
     }
