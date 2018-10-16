@@ -11,6 +11,8 @@ import {createStackNavigator} from 'react-navigation'
 import SectionListDemo from "./pages/ScetionListDemo";
 import ListViewDemo from './pages/ListViewDemo';
 
+import FetchTest from './pages/FetchTest'
+
 const AppRoot = createStackNavigator({
 
     App: {
@@ -47,4 +49,4 @@ const AppRoot = createStackNavigator({
 
 });
 
-AppRegistry.registerComponent(appName, () => AppRoot);
+AppRegistry.registerComponent(appName, () => FetchTest);
