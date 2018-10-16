@@ -32,6 +32,13 @@ export default class App extends Component {
                         navigation.navigate('SectionListDemo');
                     }}
                 >click me go to SectionListDemo page</Text>
+
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        navigation.navigate('ListViewDemo');
+                    }}
+                >click me go to ListViewDemo page</Text>
             </View>
         );
     }
