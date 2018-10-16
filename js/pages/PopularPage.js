@@ -3,44 +3,91 @@ import {
     StyleSheet,
     Text,
     View,
-    TextInput,
+    ListView,
+    RefreshControl,
 } from 'react-native';
-
+import RepostoryCell from '../common/RepostoryCell'
 import DataRepository from '../expand/dao/DataRepository'
+import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
 
 export default class PopularPage extends Component {
+
+
+    render() {
+        return <View style={styles.container}>
+            <ScrollableTabView
+                renderTabBar={() =>
+                    <ScrollableTabBar/>
+                }
+                tabBarBackgroundColor={'#2196f3'}
+                tabBarActiveTextColor={'mintcream'}
+                tabBarInactiveTextColor={'white'}
+                tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}
+                }
+            >
+                <PopularTab tabLabel='java'>JAVA</PopularTab>
+                <PopularTab tabLabel='ios'>IOS</PopularTab>
+                <PopularTab tabLabel='android'>Android</PopularTab>
+                <PopularTab tabLabel='js'>Js</PopularTab>
+                <PopularTab tabLabel='python'>Python</PopularTab>
+                <PopularTab tabLabel='kotlin'>Kotlin</PopularTab>
+                <PopularTab tabLabel='c++'>C++</PopularTab>
+            </ScrollableTabView>
+        </View>
+    }
+
+
+}
+
+class PopularTab extends Component {
 
     constructor(props) {
         super();
         this.dataRepository = new DataRepository();
         this.state = {
             result: '',
+            dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
+            isLoading:false,
         }
     }
 
     render() {
         return <View style={styles.container}>
-            <Text style={styles.welcome}
-                  onPress={() => {
-                      this.onLoad();
-                  }}
-            >获取数据</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => this.text = text}
+            <ListView
+                dataSource={this.state.dataSource}
+                renderRow={(data) => this._renderRow(data)}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.isLoading}
+                        onRefresh={()=>this.loadData()}
+                        colors={['red','green','orange']}
+                    />
+                }
             />
-            <Text style={styles.welcome}>'获取到的数据是'{this.state.result}</Text>
+
         </View>
     }
 
-    onLoad() {
-        let url = this.getUrl(this.text);
+    _renderRow(data) {
+        return <RepostoryCell data={data}/>
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+
+    loadData() {
+        this.setState({
+            isLoading:true
+        })
+        let url = this.getUrl(this.props.tabLabel);
         this.dataRepository.fetchNetRepository(url)
             .then(result => {
                 this.setState({
-                    result: JSON.stringify(result)
+                    dataSource: this.state.dataSource.cloneWithRows(result.items),
+                    isLoading:false
                 })
 
             })
@@ -55,7 +102,6 @@ export default class PopularPage extends Component {
         return URL + key
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
