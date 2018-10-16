@@ -13,6 +13,7 @@ import {
     View,
 } from 'react-native';
 
+import HttpUitls from './HttpUitls'
 
 export default class FetchTest extends Component {
     constructor(props) {
@@ -60,34 +61,58 @@ export default class FetchTest extends Component {
     }
 
     _fetchData(url) {
-        fetch(url).then(response => response.json()).then(result => {
-            this.setState({
-                result: JSON.stringify(result)
+        // fetch(url).then(response => response.json()).then(result => {
+        //     this.setState({
+        //         result: JSON.stringify(result)
+        //     })
+        // }).catch(error => {
+        //     this.setState({
+        //         result: '错误' + JSON.stringify(error)
+        //     })
+        // })
+        //
+        HttpUitls.get(url)
+            .then(result => {
+                this.setState({
+                    result: result
+                })
             })
-        }).catch(error => {
-            this.setState({
-                result: '错误' + JSON.stringify(error)
+            .catch(error => {
+                this.setState({
+                    result: '错误' + error
+                })
             })
-        })
     }
 
     _pushData(url, param) {
-        fetch(url, {
-            method: 'Post',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(param)
-        }).then(response => response.json()).then(result => {
-            this.setState({
-                result: JSON.stringify(result)
+        // fetch(url, {
+        //     method: 'Post',
+        //     headers: {
+        //         Accept: "application/json",
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(param)
+        // }).then(response => response.json()).then(result => {
+        //     this.setState({
+        //         result: JSON.stringify(result)
+        //     })
+        // }).catch(error => {
+        //     this.setState({
+        //         result: '错误' + JSON.stringify(error)
+        //     })
+        // })
+
+        HttpUitls.post(url,param)
+            .then(result => {
+                this.setState({
+                    result: result
+                })
             })
-        }).catch(error => {
-            this.setState({
-                result: '错误' + JSON.stringify(error)
+            .catch(error => {
+                this.setState({
+                    result: '错误' + error
+                })
             })
-        })
     }
 }
 
