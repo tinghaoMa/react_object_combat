@@ -5,11 +5,13 @@ import {
     View,
     ListView,
     RefreshControl,
+    DeviceEventEmitter
 } from 'react-native';
 import RepostoryCell from '../common/RepostoryCell'
 import DataRepository from '../expand/dao/DataRepository'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
 
@@ -25,6 +27,9 @@ export default class PopularPage extends Component {
 
     componentDidMount() {
         this.loadData();
+        this.listener = DeviceEventEmitter.addListener('show', (text) => {
+            this.toast.show(text, DURATION.LENGTH_SHORT);
+        });
     }
 
     loadData() {
@@ -44,6 +49,7 @@ export default class PopularPage extends Component {
         let content = this.state.language.length > 0 ? this.renderContent() : null;
         return <View style={styles.container}>
             {content}
+            <Toast ref={toast => this.toast = toast}/>
         </View>
     }
 
