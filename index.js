@@ -7,4 +7,4 @@ import AsyncStoragePage from './js/pages/AsyncStoragePage'
 import MyPage from './js/pages/MyPage'
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => MyPage);
+AppRegistry.registerComponent(appName, () => PopularPage);
