@@ -27,9 +27,13 @@ export default class PopularPage extends Component {
 
     componentDidMount() {
         this.loadData();
-        this.listener = DeviceEventEmitter.addListener('show', (text) => {
+        this.listener = DeviceEventEmitter.addListener('showToast', (text) => {
             this.toast.show(text, DURATION.LENGTH_SHORT);
         });
+    }
+
+    componentWillMount() {
+        this.listener && this.listener.remove();
     }
 
     loadData() {
@@ -117,6 +121,8 @@ class PopularTab extends Component {
         let url = this.getUrl(this.props.tabLabel);
         this.dataRepository.fetchRepository(url)
             .then(result => {
+                //发送通知
+                DeviceEventEmitter.emit('showToast', '刷新成功');
                 let items = result && result.items ? result.items : result ? result : [];
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(items),
