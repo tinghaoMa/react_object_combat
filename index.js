@@ -8,7 +8,10 @@ import MyPage from './js/pages/MyPage'
 import SortKeyPage from './js/pages/SortKeyPage'
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => SortKeyPage);
+AppRegistry.registerComponent(appName, () => PopularPage);
+
+
+
 
 
 
