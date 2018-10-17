@@ -17,4 +17,29 @@ export default class ArrayUtils {
         }
         array.push(item);
     }
+
+    static clone(from) {
+        if (!from) {
+            return [];
+        }
+        let newArray = [];
+        for (let i = 0; i < from.length; i++) {
+            // newArray.push(from[i])
+            newArray[i] = from[i];
+        }
+        return newArray;
+    }
+
+    static isEqual(arr1, arr2) {
+        if (!(arr1 && arr2)) {
+            return false;
+        }
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if(arr1[i]!==arr2[i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }
