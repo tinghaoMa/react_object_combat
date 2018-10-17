@@ -8,19 +8,23 @@ import {
     StyleSheet,
     Text,
     View,
+    Image,
     ScrollView
 } from 'react-native';
-
+import CheckBox from 'react-native-check-box';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
+import ArrayUtils from '../utils/ArrayUtils';
 
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 export default class MyPage extends Component {
 
     constructor() {
         super();
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
+        this.changedValues = [];
         this.state = {
             dataArray: []
         }
@@ -42,6 +46,7 @@ export default class MyPage extends Component {
                 {this.renderView()}
 
             </ScrollView>
+            <Toast ref={toast => this.toast = toast}/>
         </View>
     }
 
@@ -55,13 +60,57 @@ export default class MyPage extends Component {
     }
 
     rightBtnClick() {
+        if (this.changedValues.length !== 0) {
+            this.languageDao.save(this.state.dataArray)
+        }
+    }
 
+    renderCheckBox(data) {
+        return <CheckBox
+            style={{flex: 1, padding: 10}}
+            onClick={() => {
+                this.setState({
+                    isChecked: !data.checked
+                })
+                this._onCheckBoxClick(data);
+            }}
+            isChecked={data.checked}
+            leftText={data.name}
+            checkedImage={<Image style={{tintColor: 'green'}} source={require('../../res/images/ic_check_box.png')}/>}
+            unCheckedImage={<Image style={{tintColor: 'green'}}
+                                   source={require('../../res/images/ic_check_box_outline_blank.png')}/>}
+        />
+    }
+
+    _onCheckBoxClick(data) {
+        data.checked = !data.checked;
+        this.toast.show(`click ${data.name + '----' + data.checked}`, DURATION.LENGTH_SHORT);
+        ArrayUtils.updateArray(this.changedValues, data);
     }
 
     renderView() {
-        return <Text>
-            {JSON.stringify(this.state.dataArray)}
-        </Text>
+        if (!this.state.dataArray || this.state.dataArray.length === 0) {
+            return <Text style={{color: 'red'}}>
+                获取到的自定义标签数据错误
+            </Text>
+        } else {
+            let len = this.state.dataArray.length;
+            let views = [];
+            for (let i = 0; i <= len - 2; i += 2) {
+                let item = this.state.dataArray[i];
+                let nextItem = this.state.dataArray[i + 1];
+                views.push(
+                    <View key={i}>
+                        <View style={styles.item}>
+                            {this.renderCheckBox(item)}
+                            {this.renderCheckBox(nextItem)}
+                        </View>
+                        <View style={styles.line}/>
+                    </View>
+                )
+            }
+            return views;
+        }
     }
 
     loadData() {
@@ -76,6 +125,7 @@ export default class MyPage extends Component {
                 }
             )
     }
+
 }
 
 
@@ -90,5 +140,13 @@ const styles = StyleSheet.create({
     input: {
         height: 20,
         borderWidth: 1
+    },
+    line: {
+        height: 0.3,
+        backgroundColor: 'black'
+    },
+    item: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
