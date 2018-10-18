@@ -106,8 +106,14 @@ class PopularTab extends Component {
         </View>
     }
 
+    onSelect(item) {
+
+    }
+
     _renderRow(data) {
-        return <RepostoryCell data={data}/>
+        return <RepostoryCell
+            onSelect={() => this.onSelect(data)}
+            data={data}/>
     }
 
     componentDidMount() {

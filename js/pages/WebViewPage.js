@@ -17,8 +17,8 @@ import NavigationBar from '../common/NavigationBar';
 const URL = 'Http://www.imooc.com';
 export default class WebViewPage extends React.Component {
 
-    constructor(proos) {
-        super(proos);
+    constructor(props) {
+        super(props);
         this.state = {
             url: URL,
             title: '',
@@ -45,6 +45,7 @@ export default class WebViewPage extends React.Component {
             <WebView
                 source={{uri: this.state.url}}
                 style={{marginTop: 20}}
+                startInLoadingState={true}
                 onNavigationStateChange={
                     (e) => this._onNavigationStateChange(e)
                 }
