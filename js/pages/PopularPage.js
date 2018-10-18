@@ -15,10 +15,11 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
 
-export default class PopularPage extends Component {
+export default class PopularPage extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        const {navigation} = this.props;
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
         this.state = {
             language: [],
@@ -71,16 +72,21 @@ export default class PopularPage extends Component {
         >
             {this.state.language.map((value, index, arr) => {
                 let item = arr[index];
-                return item.checked ? <PopularTab key={index} tabLabel={item.path}>{item.name}</PopularTab> : null;
+                return item.checked ? <PopularTab
+                    key={index}
+                    tabLabel={item.path}
+                    {...this.props}
+                >{item.name}
+                    </PopularTab> : null;
             })}
         </ScrollableTabView>
     }
 }
 
-class PopularTab extends Component {
+class PopularTab extends React.Component {
 
     constructor(props) {
-        super();
+        super(props);
         this.dataRepository = new DataRepository();
         this.state = {
             result: '',
@@ -107,7 +113,10 @@ class PopularTab extends Component {
     }
 
     onSelect(item) {
-
+        const {navigation} = this.props;
+        navigation.navigate('WebViewPage',{
+            item:"hello world",
+        });
     }
 
     _renderRow(data) {

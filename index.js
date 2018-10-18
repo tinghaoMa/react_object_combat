@@ -9,7 +9,9 @@ import WebViewPage from './js/pages/WebViewPage'
 import SortKeyPage from './js/pages/SortKeyPage'
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => WebViewPage);
+import {AppStack} from "./js/pages/AppStackNavigators";
+
+AppRegistry.registerComponent(appName, () => AppStack);
 
 
 

@@ -25,6 +25,7 @@ export default class WebViewPage extends React.Component {
             canGoBack: false,
             canGo: false,
         }
+
     }
 
     render() {
@@ -57,16 +58,16 @@ export default class WebViewPage extends React.Component {
 
 
     _goBack() {
-        if(this.state.canGoBack){
+        if (this.state.canGoBack) {
             this.webView.goBack();
-        }else{
+        } else {
             this.toast.show('已经到顶了', DURATION.LENGTH_SHORT);
         }
     }
 
     _go() {
         this.setState({
-            url:this.text,
+            url: this.text,
         })
     }
 
