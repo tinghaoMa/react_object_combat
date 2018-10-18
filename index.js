@@ -7,6 +7,7 @@ import AsyncStoragePage from './js/pages/AsyncStoragePage';
 import MyPage from './js/pages/MyPage';
 import WebViewPage from './js/pages/WebViewPage';
 import SortKeyPage from './js/pages/SortKeyPage';
+import TrendingTestPage from './js/pages/TrendingTestPage';
 import TrendingPage from './js/pages/TrendingPage';
 import {name as appName} from './app.json';
 
