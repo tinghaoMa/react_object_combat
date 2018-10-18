@@ -11,6 +11,10 @@ export default class RepostoryCell extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            isFavorite: false,
+            favoriteIcon: require('../../res/images/ic_unstar_transparent.png'),
+        }
     }
 
     render() {
@@ -33,12 +37,27 @@ export default class RepostoryCell extends React.Component {
                         <Text>Stars:</Text>
                         <Text style={styles.welcome}>{this.props.data.stargazers_count}</Text>
                     </View>
-                    <Image
-                        style={{width: 22, height: 22, margin: 2}}
-                        source={require('../../res/images/ic_star.png')}
-                    />
+                    {this.getFavrioteBtn()}
                 </View>
             </View>
+        </TouchableOpacity>
+    }
+
+    getFavrioteBtn() {
+        return <TouchableOpacity
+            onPress={() => {
+                let isFavorite = !this.state.isFavorite;
+                this.setState({
+                    isFavorite: isFavorite,
+                    favoriteIcon: isFavorite ? require('../../res/images/ic_star.png') :
+                        require('../../res/images/ic_unstar_transparent.png')
+                });
+            }}
+        >
+            <Image
+                style={{width: 22, height: 22, margin: 2,tintColor:'red'}}
+                source={this.state.favoriteIcon}
+            />
         </TouchableOpacity>
     }
 }
@@ -66,12 +85,12 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         color: '#757575'
     },
-    cell_container:{
-        padding:10,
-        margin:5,
-        borderWidth:0.5,
+    cell_container: {
+        padding: 10,
+        margin: 5,
+        borderWidth: 0.5,
         borderColor: '#dddddd',
-        borderRadius:2,
-        elevation:5,
+        borderRadius: 2,
+        elevation: 5,
     }
 });
