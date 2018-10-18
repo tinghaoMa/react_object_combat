@@ -7,7 +7,7 @@ import {
     RefreshControl,
     DeviceEventEmitter
 } from 'react-native';
-import RepostoryCell from '../common/RepostoryCell'
+import TrendingCell from '../common/TrendingCell'
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
@@ -74,7 +74,7 @@ export default class PopularPage extends React.Component {
                 let item = arr[index];
                 return item.checked ? <TrendingTab
                     key={index}
-                    tabLabel={item.path}
+                    tabLabel={item.name}
                     {...this.props}
                 >{item.name}
                 </TrendingTab> : null;
@@ -121,7 +121,7 @@ class TrendingTab extends React.Component {
     }
 
     _renderRow(data) {
-        return <RepostoryCell
+        return <TrendingCell
             onSelect={() => this.onSelect(data)}
             data={data}/>
     }
