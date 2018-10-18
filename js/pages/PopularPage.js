@@ -115,7 +115,7 @@ class PopularTab extends React.Component {
     onSelect(item) {
         const {navigation} = this.props;
         navigation.navigate('WebViewPage',{
-            item:"hello world",
+            item:item,
         });
     }
 

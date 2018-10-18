@@ -13,26 +13,35 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import NavigationBar from '../common/NavigationBar';
+import ViewUtils from '../utils/ViewUtils';
 
 const URL = 'Http://www.imooc.com';
 export default class WebViewPage extends React.Component {
 
     constructor(props) {
         super(props);
+
+        const {navigation} = this.props;
+        const item = navigation.getParam('item', 'no');
+        this.url = item.html_url;
+        this.title = item.full_name;
         this.state = {
-            url: URL,
-            title: '',
+            url: this.url,
+            title: this.title,
             canGoBack: false,
             canGo: false,
         }
-
     }
 
     render() {
         return <View style={styles.container}>
             <NavigationBar
-                title={'webView练习'}
+                title={this.state.title}
+                leftButton={ViewUtils.getButton(require('../../res/images/ic_arrow_back_white_36pt.png'), () => {
+                    this._onBackClick();
+                })}
             />
+            {/* 隐藏输入框
             <View style={styles.row}>
                 <Text style={styles.welcome}
                       onPress={() => this._goBack()}>返回</Text>
@@ -43,9 +52,9 @@ export default class WebViewPage extends React.Component {
                 <Text style={styles.welcome}
                       onPress={() => this._go()}>前往</Text>
             </View>
+            */}
             <WebView
                 source={{uri: this.state.url}}
-                style={{marginTop: 20}}
                 startInLoadingState={true}
                 onNavigationStateChange={
                     (e) => this._onNavigationStateChange(e)
@@ -74,8 +83,11 @@ export default class WebViewPage extends React.Component {
     _onNavigationStateChange(e) {
         this.setState({
             canGoBack: e.canGoBack,
-            title: e.title,
         })
+    }
+
+    _onBackClick() {
+        this.props.navigation.pop();
     }
 }
 
