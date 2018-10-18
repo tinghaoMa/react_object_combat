@@ -8,7 +8,7 @@ import {
     DeviceEventEmitter
 } from 'react-native';
 import RepostoryCell from '../common/RepostoryCell'
-import DataRepository from '../expand/dao/DataRepository'
+import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -77,7 +77,7 @@ export default class PopularPage extends React.Component {
                     tabLabel={item.path}
                     {...this.props}
                 >{item.name}
-                    </PopularTab> : null;
+                </PopularTab> : null;
             })}
         </ScrollableTabView>
     }
@@ -87,7 +87,7 @@ class PopularTab extends React.Component {
 
     constructor(props) {
         super(props);
-        this.dataRepository = new DataRepository();
+        this.dataRepository = new DataRepository(FLAG_STORAGE.flag_popular);
         this.state = {
             result: '',
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -114,8 +114,8 @@ class PopularTab extends React.Component {
 
     onSelect(item) {
         const {navigation} = this.props;
-        navigation.navigate('WebViewPage',{
-            item:item,
+        navigation.navigate('WebViewPage', {
+            item: item,
         });
     }
 

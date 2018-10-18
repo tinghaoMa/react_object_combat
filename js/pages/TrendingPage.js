@@ -12,15 +12,15 @@ import {
     ScrollView,
 } from 'react-native';
 import NavigationBar from '../common/NavigationBar';
-import GitHubTrending from 'GitHubTrending';
+import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 
 const TRENDING_URL = 'https://github.com/trending/';
 
-export default class TrendingTestPage extends React.Component {
+export default class TrendingPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.trending = new GitHubTrending();
+        this.repository = new DataRepository(FLAG_STORAGE.flag_trending);
         this.state = {
             result: ''
         }
@@ -51,7 +51,7 @@ export default class TrendingTestPage extends React.Component {
 
     _loadData() {
         let url = TRENDING_URL + this.text;
-        this.trending.fetchTrending(url)
+        this.repository.fetchRepository(url)
             .then(result => {
                 this.setState({
                     result: JSON.stringify(result)
