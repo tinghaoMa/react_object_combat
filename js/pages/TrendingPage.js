@@ -26,7 +26,7 @@ var timeSpanTextArray = [
 
 const URL = 'https://github.com/trending/';
 
-export default class PopularPage extends React.Component {
+export default class TrendingPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -34,6 +34,9 @@ export default class PopularPage extends React.Component {
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_language);
         this.state = {
             language: [],
+            isVisible: false,
+            buttonRect: [],
+            timeSpan: timeSpanTextArray[0],
         }
     }
 
@@ -71,14 +74,20 @@ export default class PopularPage extends React.Component {
                 contentStyle={
                     {
                         backgroundColor: '#343434',
-                        opacity:0.8,
+                        opacity: 0.8,
                     }
                 }
                 onClose={() => this.closePopover()}>
                 {timeSpanTextArray.map((result, i, arr) => {
-                    return <TouchableOpacity  key={i}>
+                    return <TouchableOpacity
+                        key={i}
+                        underlayColor={'transparent'}
+                        onPress={() => {
+                            this._onSeleceTimeSpan(arr[i]);
+                        }}
+                    >
                         <Text
-                            style={{fontSize: 18, color: 'white',padding:8}}
+                            style={{fontSize: 18, color: 'white', padding: 8}}
                         >{arr[i].showText}</Text>
                     </TouchableOpacity>
                 })}
@@ -112,6 +121,7 @@ export default class PopularPage extends React.Component {
                 return item.checked ? <TrendingTab
                     key={index}
                     tabLabel={item.name}
+                    timeSpan={this.state.timeSpan}
                     {...this.props}
                 >{item.name}
                 </TrendingTab> : null;
@@ -153,6 +163,13 @@ export default class PopularPage extends React.Component {
             });
         });
     }
+
+    _onSeleceTimeSpan(timeSpan) {
+        this.closePopover();
+        this.setState({
+            timeSpan: timeSpan,
+        })
+    }
 }
 
 class TrendingTab extends React.Component {
@@ -167,6 +184,12 @@ class TrendingTab extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.timeSpan !== this.props.timeSpan) {
+            this.loadData(nextProps.timeSpan);
+        }
+    }
+
     render() {
         return <View style={styles.container}>
             <ListView
@@ -175,13 +198,17 @@ class TrendingTab extends React.Component {
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.isLoading}
-                        onRefresh={() => this.loadData()}
+                        onRefresh={() => this.onRefresh()}
                         colors={['red', 'green', 'orange']}
                     />
                 }
             />
 
         </View>
+    }
+
+    onRefresh() {
+        this.loadData(this.props.timeSpan);
     }
 
     onSelect(item) {
@@ -199,21 +226,26 @@ class TrendingTab extends React.Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadData(this.props.timeSpan, true);
     }
 
-    loadData() {
-        this.setState({
+    updateState(dic){
+        if(!this) return;
+        this.setState(dic);
+
+    }
+    loadData(timeSpan, isRefresh) {
+        this.updateState({
             isLoading: true
         })
-        let url = this.getUrl('?since=daily', this.props.tabLabel);
+        let url = this.getUrl(timeSpan, this.props.tabLabel);
         console.log(`url = ${url}`);
         this.dataRepository.fetchRepository(url)
             .then(result => {
                 //发送通知
                 DeviceEventEmitter.emit('showToast', '刷新成功');
                 let items = result && result.items ? result.items : result ? result : [];
-                this.setState({
+                this.updateState({
                     dataSource: this.state.dataSource.cloneWithRows(items),
                     isLoading: false
                 })
@@ -224,20 +256,20 @@ class TrendingTab extends React.Component {
 
             })
             .then(items => {
-                this.setState({
+                this.updateState({
                     dataSource: this.state.dataSource.cloneWithRows(items),
                     isLoading: false
                 })
             })
             .catch(error => {
-                this.setState({
+                this.updateState({
                     result: JSON.stringify(error)
                 })
             })
     }
 
     getUrl(timeSpan, category) {
-        return URL + category + timeSpan;
+        return URL + category + '?' + timeSpan.searchText;
     }
 }
 
