@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
+import HtmlView from 'react-native-htmlview';
 
 export default class TrendingCell extends React.Component {
 
@@ -14,13 +15,23 @@ export default class TrendingCell extends React.Component {
     }
 
     render() {
+        let description = '<p>'+this.props.data.description+'</p>';
         return <TouchableOpacity
             style={styles.container}
             onPress={this.props.onSelect}
         >
             <View style={styles.cell_container}>
                 <Text style={styles.title}>{this.props.data.fullName}</Text>
-                <Text style={styles.description}>{this.props.data.description}</Text>
+                <HtmlView
+                    value={description}
+                    onLinkLongPress={(url) => {
+                        console.log('防止报错');
+                    }}
+                    stylesheet={{
+                        p:styles.description,
+                        a:styles.description,
+                    }}
+                />
                 <Text style={styles.description}>{this.props.data.meta}</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
