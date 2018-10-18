@@ -78,7 +78,7 @@ export default class PopularPage extends React.Component {
                 {timeSpanTextArray.map((result, i, arr) => {
                     return <TouchableOpacity  key={i}>
                         <Text
-                            style={{fontSize: 18, color: 'white'}}
+                            style={{fontSize: 18, color: 'white',padding:8}}
                         >{arr[i].showText}</Text>
                     </TouchableOpacity>
                 })}
