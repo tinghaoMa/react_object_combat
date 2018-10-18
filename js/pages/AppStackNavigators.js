@@ -14,12 +14,13 @@ import TrendingPage from './TrendingPage';
 import WebViewPage from './WebViewPage';
 
 export const AppStack = createStackNavigator({
-    TrendingPage: {
-        screen: TrendingPage
-    },
     PopularPage: {
         screen: PopularPage
     },
+    TrendingPage: {
+        screen: TrendingPage
+    },
+
     WebViewPage: {
         screen: WebViewPage
     }
