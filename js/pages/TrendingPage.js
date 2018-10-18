@@ -5,13 +5,24 @@ import {
     View,
     ListView,
     RefreshControl,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import TrendingCell from '../common/TrendingCell'
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import NavigationBar from "../common/NavigationBar";
+import TimeSpan from '../model/TimeSpan';
+import Popover from '../common/Popover';
+
+
+var timeSpanTextArray = [
+    new TimeSpan('今 天', 'since=daily'),
+    new TimeSpan('本 周', 'since=weekly'),
+    new TimeSpan('本 月', 'since=monthly')];
 
 const URL = 'https://github.com/trending/';
 
@@ -52,8 +63,34 @@ export default class PopularPage extends React.Component {
 
     render() {
         let content = this.state.language.length > 0 ? this.renderContent() : null;
+        let timeSpanView =
+            <Popover
+                isVisible={this.state.isVisible}
+                fromRect={this.state.buttonRect}
+                placement='bottom'
+                contentStyle={
+                    {
+                        backgroundColor: '#343434',
+                        opacity:0.8,
+                    }
+                }
+                onClose={() => this.closePopover()}>
+                {timeSpanTextArray.map((result, i, arr) => {
+                    return <TouchableOpacity  key={i}>
+                        <Text
+                            style={{fontSize: 18, color: 'white'}}
+                        >{arr[i].showText}</Text>
+                    </TouchableOpacity>
+                })}
+
+            </Popover>
+
         return <View style={styles.container}>
+            <NavigationBar
+                titleView={this.renderTitleView()}
+            />
             {content}
+            {timeSpanView}
             <Toast ref={toast => this.toast = toast}/>
         </View>
     }
@@ -79,7 +116,42 @@ export default class PopularPage extends React.Component {
                 >{item.name}
                 </TrendingTab> : null;
             })}
+
         </ScrollableTabView>
+    }
+
+    renderTitleView() {
+        return <View>
+            <TouchableOpacity
+                ref='button'
+                onPress={() => {
+                    this.showPopover();
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}
+                    }>趋势</Text>
+                    <Image
+                        style={{width: 12, height: 12, marginLeft: 5}}
+                        source={require('../../res/images/ic_spinner_triangle.png')}/>
+                </View>
+            </TouchableOpacity>
+        </View>;
+
+    }
+
+    closePopover() {
+        this.setState({
+            isVisible: false
+        });
+    }
+
+    showPopover() {
+        this.refs.button.measure((ox, oy, width, height, px, py) => {
+            this.setState({
+                isVisible: true,
+                buttonRect: {x: px, y: py, width: width, height: height}
+            });
+        });
     }
 }
 
@@ -134,7 +206,7 @@ class TrendingTab extends React.Component {
         this.setState({
             isLoading: true
         })
-        let url = this.getUrl('?since=daily',this.props.tabLabel);
+        let url = this.getUrl('?since=daily', this.props.tabLabel);
         console.log(`url = ${url}`);
         this.dataRepository.fetchRepository(url)
             .then(result => {
@@ -164,7 +236,7 @@ class TrendingTab extends React.Component {
             })
     }
 
-    getUrl(timeSpan,category) {
+    getUrl(timeSpan, category) {
         return URL + category + timeSpan;
     }
 }
