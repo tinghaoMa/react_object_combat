@@ -16,6 +16,7 @@ import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
 
 const URL = 'Http://www.imooc.com';
+const API_URL = 'http://github.com/';
 export default class WebViewPage extends React.Component {
 
     constructor(props) {
@@ -23,8 +24,8 @@ export default class WebViewPage extends React.Component {
 
         const {navigation} = this.props;
         const item = navigation.getParam('item', 'no');
-        this.url = item.html_url;
-        this.title = item.full_name;
+        this.url = item.html_url ? item.html_url : API_URL + item.fullName;
+        this.title = item.full_name?item.full_name:item.fullName;
         this.state = {
             url: this.url,
             title: this.title,

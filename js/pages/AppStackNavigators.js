@@ -10,9 +10,13 @@ import {
 } from 'react-navigation'
 
 import PopularPage from './PopularPage';
+import TrendingPage from './TrendingPage';
 import WebViewPage from './WebViewPage';
 
 export const AppStack = createStackNavigator({
+    TrendingPage: {
+        screen: TrendingPage
+    },
     PopularPage: {
         screen: PopularPage
     },

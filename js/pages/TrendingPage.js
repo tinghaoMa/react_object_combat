@@ -113,6 +113,7 @@ class TrendingTab extends React.Component {
     }
 
     onSelect(item) {
+        console.log(JSON.stringify(item));
         const {navigation} = this.props;
         navigation.navigate('WebViewPage', {
             item: item,

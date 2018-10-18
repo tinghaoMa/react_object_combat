@@ -13,7 +13,7 @@ import {name as appName} from './app.json';
 
 import {AppStack} from "./js/pages/AppStackNavigators";
 
-AppRegistry.registerComponent(appName, () => TrendingPage);
+AppRegistry.registerComponent(appName, () => AppStack);
 
 
 
