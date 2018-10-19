@@ -12,30 +12,40 @@ export default class RepostoryCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isFavorite: false,
-            favoriteIcon: require('../../res/images/ic_unstar_transparent.png'),
+            isFavorite: this.props.projectModel.isFavorite,
+            favoriteIcon: this.getImageIcon(this.props.projectModel.isFavorite)
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.isFavorite !== this.state.isFavorite) {
+            this.setState({
+                isFavorite: nextProps.projectModel.isFavorite,
+                favoriteIcon: this.getImageIcon(nextProps.projectModel.isFavorite)
+            })
         }
     }
 
     render() {
+        let item = this.props.projectModel.item ? this.props.projectModel.item : this.props.projectModel;
         return <TouchableOpacity
             style={styles.container}
             onPress={this.props.onSelect}
         >
             <View style={styles.cell_container}>
-                <Text style={styles.title}>{this.props.data.full_name}</Text>
-                <Text style={styles.description}>{this.props.data.description}</Text>
+                <Text style={styles.title}>{item.full_name}</Text>
+                <Text style={styles.description}>{item.description}</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text>Author:</Text>
                         <Image
                             style={{width: 22, height: 22, margin: 2}}
-                            source={{uri: this.props.data.owner.avatar_url}}
+                            source={{uri: item.owner.avatar_url}}
                         />
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text>Stars:</Text>
-                        <Text style={styles.welcome}>{this.props.data.stargazers_count}</Text>
+                        <Text style={styles.welcome}>{item.stargazers_count}</Text>
                     </View>
                     {this.getFavrioteBtn()}
                 </View>
@@ -49,16 +59,25 @@ export default class RepostoryCell extends React.Component {
                 let isFavorite = !this.state.isFavorite;
                 this.setState({
                     isFavorite: isFavorite,
-                    favoriteIcon: isFavorite ? require('../../res/images/ic_star.png') :
-                        require('../../res/images/ic_unstar_transparent.png')
+                    favoriteIcon: this.getImageIcon(isFavorite)
                 });
+                this.onPressFavoritorBtn();
             }}
         >
             <Image
-                style={{width: 22, height: 22, margin: 2,tintColor:'red'}}
+                style={{width: 22, height: 22, margin: 2, tintColor: 'red'}}
                 source={this.state.favoriteIcon}
             />
         </TouchableOpacity>
+    }
+
+    getImageIcon(isFavorite) {
+        return isFavorite ? require('../../res/images/ic_star.png') :
+            require('../../res/images/ic_unstar_transparent.png');
+    }
+
+    onPressFavoritorBtn() {
+        this.props.onFavorite(this.props.projectModel.item,!this.state.isFavorite);
     }
 }
 

@@ -12,6 +12,7 @@ import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import ProjectModel from '../model/ProjectModel'
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
 
@@ -119,14 +120,40 @@ class PopularTab extends React.Component {
         });
     }
 
-    _renderRow(data) {
+    _renderRow(projectModel) {
         return <RepostoryCell
-            onSelect={() => this.onSelect(data)}
-            data={data}/>
+            onFavorite={(item, isFavorite) => {
+                this.onFavorite(item, isFavorite);
+            }}
+            key={projectModel.item.id}
+            onSelect={() => this.onSelect(projectModel)}
+            projectModel={projectModel}/>
     }
 
     componentDidMount() {
         this.loadData();
+    }
+
+    flushFavoriteState() {
+        let projectModels = [];
+        let items = this.items;
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            projectModels.push(new ProjectModel(item, true));
+        }
+        this.updateState({
+            isLoading: false,
+            dataSource: this.getDataSource(projectModels),
+        })
+    }
+
+    getDataSource(data) {
+        return this.state.dataSource.cloneWithRows(data);
+    }
+
+    updateState(dic) {
+        if (!this) return;
+        this.setState(dic);
     }
 
     loadData() {
@@ -138,32 +165,39 @@ class PopularTab extends React.Component {
             .then(result => {
                 //发送通知
                 DeviceEventEmitter.emit('showToast', '刷新成功');
-                let items = result && result.items ? result.items : result ? result : [];
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(items),
-                    isLoading: false
-                })
-
+                this.items = result && result.items ? result.items : result ? result : [];
+                this.flushFavoriteState();
                 if (result && result.update_date && !this.dataRepository.checkDate(result.update_date)) {
                     return this.dataRepository.fetchNetRepository(url);
                 }
 
             })
             .then(items => {
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(items),
-                    isLoading: false
-                })
+                if (!items || items.length === 0) return;
+                this.items = items;
+                this.flushFavoriteState();
             })
             .catch(error => {
-                this.setState({
-                    result: JSON.stringify(error)
+                console.log(JSON.stringify(error));
+                this.updateState({
+                    isLoading: false,
                 })
             })
     }
 
     getUrl(key) {
         return URL + key
+    }
+
+    /**
+     * 点击收藏的回调函数
+     * @param item
+     * @param isFavorite
+     */
+    onFavorite(item, isFavorite) {
+        // console.log(`item =${JSON.stringify(item)}
+        // isFavorite =${isFavorite}`);
+        
     }
 }
 
