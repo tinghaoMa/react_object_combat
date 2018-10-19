@@ -17,8 +17,12 @@ import TabPage from "./TabPage";
 import AboutPage from "./about/AboutPage";
 import MyWebSite from "./about/MyWebSite";
 import AboutAuthorPage from "./about/AboutAuthorPage";
+import FavoritePage from "./FavoritePage";
 
 export const AppStack = createStackNavigator({
+    FavoritePage: {
+        screen: FavoritePage
+    },
 
     MyPage2: {
         screen: MyPage2
