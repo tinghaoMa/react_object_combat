@@ -13,8 +13,11 @@ import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-v
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import ProjectModel from '../model/ProjectModel'
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import Utils from '../utils/Utils';
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
+var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 export default class PopularPage extends React.Component {
 
@@ -22,6 +25,7 @@ export default class PopularPage extends React.Component {
         super(props);
         const {navigation} = this.props;
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
+
         this.state = {
             language: [],
         }
@@ -126,7 +130,7 @@ class PopularTab extends React.Component {
                 this.onFavorite(item, isFavorite);
             }}
             key={projectModel.item.id}
-            onSelect={() => this.onSelect(projectModel)}
+            onSelect={() => this.onSelect(projectModel.item)}
             projectModel={projectModel}/>
     }
 
@@ -139,12 +143,29 @@ class PopularTab extends React.Component {
         let items = this.items;
         for (let i = 0; i < items.length; i++) {
             let item = items[i];
-            projectModels.push(new ProjectModel(item, true));
+            let isFavorite = Utils.checkFavorite(item, this.state.favoriteKeys);
+            projectModels.push(new ProjectModel(item, isFavorite));
         }
         this.updateState({
             isLoading: false,
             dataSource: this.getDataSource(projectModels),
         })
+    }
+
+    getFavoriteKeys() {
+        console.log('getFavoriteKeys');
+        favoriteDao.getFavoriteKeys()
+            .then(keys => {
+                if (keys) {
+                    this.updateState({
+                        favoriteKeys: keys
+                    })
+                }
+                this.flushFavoriteState();
+            })
+            .catch(e => {
+                this.flushFavoriteState();
+            })
     }
 
     getDataSource(data) {
@@ -166,7 +187,7 @@ class PopularTab extends React.Component {
                 //发送通知
                 DeviceEventEmitter.emit('showToast', '刷新成功');
                 this.items = result && result.items ? result.items : result ? result : [];
-                this.flushFavoriteState();
+                this.getFavoriteKeys();
                 if (result && result.update_date && !this.dataRepository.checkDate(result.update_date)) {
                     return this.dataRepository.fetchNetRepository(url);
                 }
@@ -175,7 +196,7 @@ class PopularTab extends React.Component {
             .then(items => {
                 if (!items || items.length === 0) return;
                 this.items = items;
-                this.flushFavoriteState();
+                this.getFavoriteKeys();
             })
             .catch(error => {
                 console.log(JSON.stringify(error));
@@ -197,7 +218,14 @@ class PopularTab extends React.Component {
     onFavorite(item, isFavorite) {
         // console.log(`item =${JSON.stringify(item)}
         // isFavorite =${isFavorite}`);
-        
+
+
+
+        if(isFavorite){
+            favoriteDao.saveFavoriteItem(item.id.toString(),JSON.stringify(item))
+        }else{
+            favoriteDao.removeFavoriteItem(item.id.toString());
+        }
     }
 }
 
