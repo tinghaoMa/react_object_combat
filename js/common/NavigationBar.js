@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     navBar: {
         justifyContent: 'space-between',
         alignItems:'center',
-        backgroundColor:'green',
+        backgroundColor:'#2196f3',
         height: Platform.OS==='ios'?NAVBAR_HEIGHT_IOS:NAVBAR_HEIGHT_ANDROID,
         flexDirection:'row'
     },

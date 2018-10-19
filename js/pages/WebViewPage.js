@@ -9,12 +9,15 @@ import {
     View,
     Text,
     WebView,
-    TextInput
+    TextInput,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
-
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import {FLAG_STORAGE} from '../expand/dao/DataRepository'
 const URL = 'Http://www.imooc.com';
 const API_URL = 'http://github.com/';
 export default class WebViewPage extends React.Component {
@@ -23,15 +26,25 @@ export default class WebViewPage extends React.Component {
         super(props);
 
         const {navigation} = this.props;
-        const item = navigation.getParam('item', 'no');
-        this.url = item.html_url ? item.html_url : API_URL + item.fullName;
-        this.title = item.full_name?item.full_name:item.fullName;
+        const projectModel = navigation.getParam('projectModel', 'no');
+        this.url = projectModel.item.html_url ? projectModel.item.html_url : API_URL + projectModel.item.fullName;
+        this.title = projectModel.item.full_name ? projectModel.item.full_name : projectModel.item.fullName;
+
+        this.favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
+        console.log(`projectModel.isFavorite =${projectModel.isFavorite}`)
         this.state = {
             url: this.url,
             title: this.title,
             canGoBack: false,
             canGo: false,
+            isFavorite: projectModel.isFavorite,
+            favoriteIcon: this.getImageIcon(projectModel.isFavorite)
         }
+    }
+
+    getImageIcon(isFavorite) {
+        return isFavorite ? require('../../res/images/ic_star.png') :
+            require('../../res/images/ic_star_navbar.png');
     }
 
     render() {
@@ -41,6 +54,7 @@ export default class WebViewPage extends React.Component {
                 leftButton={ViewUtils.getButton(require('../../res/images/ic_arrow_back_white_36pt.png'), () => {
                     this._onBackClick();
                 })}
+                rightButton={this.renderRightButton()}
             />
             {/* 隐藏输入框
             <View style={styles.row}>
@@ -88,7 +102,39 @@ export default class WebViewPage extends React.Component {
     }
 
     _onBackClick() {
+        this.props.navigation.state.params.refresh();
         this.props.navigation.pop();
+    }
+
+    renderRightButton() {
+        return <TouchableOpacity
+            onPress={() => {
+
+                let isFavorite = !this.state.isFavorite;
+                this.setState({
+                    isFavorite: isFavorite,
+                    favoriteIcon: this.getImageIcon(isFavorite)
+                });
+                this.onRightBtnClick(isFavorite);
+            }}>
+            <Image
+                style={{width: 26, height: 26, margin: 10}}
+                source={this.state.favoriteIcon}
+            />
+
+        </TouchableOpacity>
+    }
+
+    onRightBtnClick(isFavorite) {
+        this.props.navigation.state.params.projectModel.isFavorite = !this.state.isFavorite;
+        let projectModel = this.props.navigation.state.params.projectModel;
+        let key = projectModel.item.fullName ? projectModel.item.fullName : projectModel.item.id.toString();
+        if(isFavorite){
+            this.favoriteDao.saveFavoriteItem(key,
+                JSON.stringify(projectModel.item))
+        }else{
+            this.favoriteDao.removeFavoriteItem(key);
+        }
     }
 }
 

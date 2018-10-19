@@ -117,10 +117,13 @@ class PopularTab extends React.Component {
         </View>
     }
 
-    onSelect(item) {
+    onSelect(projectModel) {
         const {navigation} = this.props;
         navigation.navigate('WebViewPage', {
-            item: item,
+            refresh:()=>{
+                this._refresh();
+            },
+            projectModel: projectModel,
         });
     }
 
@@ -130,7 +133,7 @@ class PopularTab extends React.Component {
                 this.onFavorite(item, isFavorite);
             }}
             key={projectModel.item.id}
-            onSelect={() => this.onSelect(projectModel.item)}
+            onSelect={() => this.onSelect(projectModel)}
             projectModel={projectModel}/>
     }
 
@@ -218,14 +221,15 @@ class PopularTab extends React.Component {
     onFavorite(item, isFavorite) {
         // console.log(`item =${JSON.stringify(item)}
         // isFavorite =${isFavorite}`);
-
-
-
         if(isFavorite){
             favoriteDao.saveFavoriteItem(item.id.toString(),JSON.stringify(item))
         }else{
             favoriteDao.removeFavoriteItem(item.id.toString());
         }
+    }
+
+    _refresh() {
+        this.loadData();
     }
 }
 

@@ -18,7 +18,7 @@ export default class RepostoryCell extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.isFavorite !== this.state.isFavorite) {
+        if (nextProps.projectModel.isFavorite !== this.state.isFavorite) {
             this.setState({
                 isFavorite: nextProps.projectModel.isFavorite,
                 favoriteIcon: this.getImageIcon(nextProps.projectModel.isFavorite)
@@ -77,6 +77,7 @@ export default class RepostoryCell extends React.Component {
     }
 
     onPressFavoritorBtn() {
+        this.props.projectModel.isFavorite = !this.state.isFavorite;
         this.props.onFavorite(this.props.projectModel.item,!this.state.isFavorite);
     }
 }
