@@ -7,18 +7,24 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    ScrollView
 } from 'react-native';
-
-import Girl from './Girl'
+import timer from 'react-native-timer'
 import NavigationBar from './NavigationBar'
 
 export default class LifecycleComponent extends React.Component {
+
     constructor(props) {
         super(props);
+        this.log('传递来的属性 = ' + this.props.name);
+        this.state = {
+            content: '开始',
+            length: 0,
+        }
         this.log('constructor');
+        this.props.loaded();
     }
-
     componentWillMount() {
         this.log('componentWillMount');
     }
@@ -33,23 +39,32 @@ export default class LifecycleComponent extends React.Component {
                         backgroundColor: 'red',
                     }}
                 />
+                <Text style={styles.text}>{this.state.content}</Text>
+                <Text style={styles.text}>{this.props.name}</Text>
             </View>
         )
+
     }
+
     componentDidMount() {
+        timer.setTimeout('updateText', () => {
+            this.setState({
+                content: '模拟update--倒计时结束更新文案成功',
+            });
+        }, 2000);
         this.log('componentDidMount');
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.log('componentWillReceiveProps');
     }
 
-    shouldComponentUpdate() {
+    shouldComponentUpdate(nextProps) {
         this.log('shouldComponentUpdate');
         return true;
     }
 
-    componentWillUpdate(){
+    componentWillUpdate() {
         this.log('componentWillUpdate');
     }
 
@@ -62,10 +77,11 @@ export default class LifecycleComponent extends React.Component {
     }
 
 
-
     log(msg) {
-        console.log(msg)
+        console.log(msg);
     }
+
+
 }
 
 
