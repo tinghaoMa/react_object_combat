@@ -8,10 +8,15 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView
+    Platform
 } from 'react-native';
 import timer from 'react-native-timer'
 import NavigationBar from './NavigationBar'
+import BitButton from './BigButton'
+const age = Platform.select({
+    ios: 10,
+    android:100,
+});
 
 export default class LifecycleComponent extends React.Component {
 
@@ -25,6 +30,7 @@ export default class LifecycleComponent extends React.Component {
         this.log('constructor');
         this.props.loaded();
     }
+
     componentWillMount() {
         this.log('componentWillMount');
     }
@@ -39,8 +45,10 @@ export default class LifecycleComponent extends React.Component {
                         backgroundColor: 'red',
                     }}
                 />
+                <BitButton/>
                 <Text style={styles.text}>{this.state.content}</Text>
                 <Text style={styles.text}>{this.props.name}</Text>
+                <Text style={styles.text}>根据平台选择变量值为{age}</Text>
             </View>
         )
 
@@ -89,6 +97,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'gray',
+        ...Platform.select({
+            ios: {
+                backgroundColor: 'red',
+            },
+            android: {
+                backgroundColor: 'orange',
+            },
+        })
     },
     text: {
         fontSize: 20,

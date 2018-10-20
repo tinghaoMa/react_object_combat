@@ -16,7 +16,7 @@ export default class BigButton extends React.Component {
 
     render() {
         return <View style={{flex:1}}>
-            <Text>I am Android</Text>
+            <Text>I am IOS BigButton.ios.js</Text>
         </View>
     }
 }
