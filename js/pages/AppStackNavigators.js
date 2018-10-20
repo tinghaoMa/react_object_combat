@@ -12,9 +12,13 @@ import {
 import PopularPage from './PopularPage';
 import TrendingPage from './TrendingPage';
 import WebViewPage from './WebViewPage';
+import MyPage2 from "./MyPage2";
+import TabPage from "./TabPage";
 
 export const AppStack = createStackNavigator({
-
+    MyPage2: {
+        screen: MyPage2
+    },
     PopularPage: {
         screen: PopularPage
     },
@@ -25,6 +29,9 @@ export const AppStack = createStackNavigator({
 
     WebViewPage: {
         screen: WebViewPage
+    } ,
+    TabPage: {
+        screen: TabPage
     }
 
 },{

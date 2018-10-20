@@ -10,6 +10,7 @@ import {
     View,
     Image,
     TouchableOpacity,
+    TouchableHighlight,
 } from 'react-native';
 
 export default class ViewUtils {
@@ -25,4 +26,50 @@ export default class ViewUtils {
         </TouchableOpacity>
     }
 
+    static getSettingItem(callback, icon, text, tintStyle, expandableIcon) {
+        return <TouchableHighlight
+            onPress={callback}
+        >
+            <View>
+                <View style={styles.item}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Image
+                            resizeMode={'stretch'}
+                            style={[{width: 16, height: 16, marginRight: 10}, tintStyle]}
+                            source={icon}
+                        />
+                        <Text>
+                            {text}
+                        </Text>
+                    </View>
+                    <Image
+                        style={[{
+                            marginRight: 10,
+                            height: 22,
+                            width: 22
+                        },
+                            tintStyle
+                        ]}
+                        source={expandableIcon?expandableIcon:require('../../res/images/ic_tiaozhuan.png')}
+                    />
+                </View>
+            </View>
+        </TouchableHighlight>
+    }
+
+
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    item: {
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+        height: 60,
+    }
+
+});
