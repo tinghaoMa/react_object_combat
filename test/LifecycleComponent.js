@@ -8,14 +8,17 @@ import {
     View,
     Text,
     StyleSheet,
-    Platform
+    Platform,
+    Image,
+    ImageBackground
 } from 'react-native';
 import timer from 'react-native-timer'
 import NavigationBar from './NavigationBar'
 import BitButton from './BigButton'
+
 const age = Platform.select({
     ios: 10,
-    android:100,
+    android: 100,
 });
 
 export default class LifecycleComponent extends React.Component {
@@ -45,10 +48,22 @@ export default class LifecycleComponent extends React.Component {
                         backgroundColor: 'red',
                     }}
                 />
+
+
+                {/*
+                <Image source={{uri: 'https://facebook.github.io/react/logo-og.png'}}
+                       style={{width: 200, height: 200}} />
+
+                <Image source={require('../res/images/ic_computer.png')}/>
                 <BitButton/>
-                <Text style={styles.text}>{this.state.content}</Text>
-                <Text style={styles.text}>{this.props.name}</Text>
-                <Text style={styles.text}>根据平台选择变量值为{age}</Text>
+
+                <ImageBackground  style={{width: '50%', height: '50%'}}
+                    source={{uri: 'https://facebook.github.io/react/logo-og.png'}}>
+                    <Text style={styles.text}>{this.state.content}</Text>
+                    <Text style={styles.text}>{this.props.name}</Text>
+                    <Text style={styles.text}>根据平台选择变量值为{age}</Text>
+                </ImageBackground>
+                */}
             </View>
         )
 
@@ -58,6 +73,8 @@ export default class LifecycleComponent extends React.Component {
         timer.setTimeout('updateText', () => {
             this.setState({
                 content: '模拟update--倒计时结束更新文案成功',
+
+
             });
         }, 2000);
         this.log('componentDidMount');
@@ -96,7 +113,6 @@ export default class LifecycleComponent extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'gray',
         ...Platform.select({
             ios: {
                 backgroundColor: 'red',
