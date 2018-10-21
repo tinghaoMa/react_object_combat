@@ -16,6 +16,7 @@ import MyPage2 from "./MyPage2";
 import TabPage from "./TabPage";
 import AboutPage from "./about/AboutPage";
 import MyWebSite from "./about/MyWebSite";
+import AboutAuthorPage from "./about/AboutAuthorPage";
 
 export const AppStack = createStackNavigator({
 
@@ -34,19 +35,22 @@ export const AppStack = createStackNavigator({
 
     WebViewPage: {
         screen: WebViewPage
-    } ,
+    },
     TabPage: {
         screen: TabPage
     },
     AboutPage: {
         screen: AboutPage
     },
+    AboutAuthorPage: {
+        screen: AboutAuthorPage
+    },
     MyWebSite: {
         screen: MyWebSite
     }
 
-},{
-    navigationOptions:{
-        header:null
+}, {
+    navigationOptions: {
+        header: null
     }
 });

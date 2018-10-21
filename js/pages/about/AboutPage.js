@@ -25,7 +25,7 @@ export default class AboutPage extends React.Component {
     }
 
     componentDidMount() {
-        this.aboutCommon.componentDidMount();
+        // this.aboutCommon.componentDidMount();
     }
 
     updateState(dic) {
@@ -48,6 +48,7 @@ export default class AboutPage extends React.Component {
     onClick(tab) {
         switch (tab) {
             case MORE_MENU.About_Author:
+                this.toAboutAuthor();
                 break;
             case MORE_MENU.WebSite:
                 this.toWebSite();
@@ -59,6 +60,11 @@ export default class AboutPage extends React.Component {
         console.log(tab);
     }
 
+    toAboutAuthor() {
+        const {navigation} = this.props;
+        navigation.navigate('AboutAuthorPage', {
+        });
+    }
     toWebSite() {
         const {navigation} = this.props;
         navigation.navigate('MyWebSite', {
@@ -107,4 +113,5 @@ export default class AboutPage extends React.Component {
         </View>
 
     }
+
 }
