@@ -14,11 +14,22 @@ import {
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import ViewUtils from '../../utils/ViewUtils';
+import FavoriteDao from '../../../js/expand/dao/FavoriteDao';
+import {FLAG_STORAGE} from '../../expand/dao/DataRepository';
+import RepsitoryUtils from '../../expand/dao/RepsitoryUtils';
+import Utils from "../../utils/Utils";
+import RepostoryCell from '../../common/RepostoryCell';
 
 export default class AboutCommon {
-    constructor(props, updateState) {
+    constructor(props, updateState, config) {
         this.props = props;
         this.updateState = updateState;
+        this.config = config;
+        this.repositories = [];
+        this.favoriteKeys = null;
+        this.favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
+        this.repsitoryUtils = new RepsitoryUtils(this);
+        this.flag = true;
     }
 
     getParallaxRenderConfig(params) {
@@ -89,6 +100,96 @@ export default class AboutCommon {
                 {contentView}
             </ParallaxScrollView>
         );
+    }
+
+    onNotifyDataChanged(items) {
+        this.updateFavorite(items);
+    }
+
+    componentDidMount() {
+        console.log(`this.flag =${this.flag}`);
+        if (!this.flag) {
+            this.repsitoryUtils.fetchRepository(this.config.info.currentRepoUrl);
+        } else {
+            let urls = [];
+            let items = this.config.items;
+            for (let i = 0; i < items.length; i++) {
+                urls.push(this.config.info.url + items[i]);
+            }
+            this.repsitoryUtils.fetchRepositories(urls);
+        }
+        this.flag = !this.flag;
+    }
+
+    async updateFavorite(repositories) {
+        if (!repositories) {
+            return;
+        }
+        this.repositories = repositories;
+        if (!this.favoriteKeys) {
+            this.favoriteKeys = await this.favoriteDao.getFavoriteKeys();
+        }
+
+        let projectModels = [];
+        let items = this.repositories;
+        for (let i = 0; i < items.length; i++) {
+            let data = items[i];
+            console.log(JSON.stringify(data));
+            let isFavorite = Utils.checkFavorite(data, this.favoriteKeys ? this.favoriteKeys : []);
+            projectModels.push({
+                item: data.item ? data.item : data,
+                isFavorite: isFavorite
+            });
+        }
+
+        this.updateState({
+            projectModels: projectModels,
+        })
+    }
+
+    renderRepository(projectModels) {
+        if (!projectModels || projectModels.length === 0) return null;
+        let views = [];
+        for (let i = 0; i < projectModels.length; i++) {
+            let projectModel = projectModels[i];
+            views.push(
+                <RepostoryCell
+                    onFavorite={(item, isFavorite) => {
+                        // this.onFavorite(item, isFavorite);
+                    }}
+                    key={projectModel.item.id}
+                    onSelect={() => {
+                        // this.onSelect(projectModel)
+                    }}
+                    projectModel={projectModel}/>
+            );
+        }
+        return views;
+    }
+
+
+    /**
+     * 点击收藏的回调函数
+     * @param item
+     * @param isFavorite
+     */
+    onFavorite(item, isFavorite) {
+        if (isFavorite) {
+            this.favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item))
+        } else {
+            this.favoriteDao.removeFavoriteItem(item.id.toString());
+        }
+    }
+
+
+    onSelect(projectModel) {
+        const {navigation} = this.props;
+        navigation.navigate('WebViewPage', {
+            refresh: () => {
+
+            },
+            projectModel: projectModel,
+        });
     }
 
 }

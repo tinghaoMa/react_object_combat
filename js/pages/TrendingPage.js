@@ -17,7 +17,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import NavigationBar from "../common/NavigationBar";
 import TimeSpan from '../model/TimeSpan';
 import Popover from '../common/Popover';
-
+import Utils from '../utils/Utils';
 
 var timeSpanTextArray = [
     new TimeSpan('今 天', 'since=daily'),
@@ -250,7 +250,7 @@ class TrendingTab extends React.Component {
                     isLoading: false
                 })
 
-                if (result && result.update_date && !this.dataRepository.checkDate(result.update_date)) {
+                if (result && result.update_date && !Utils.checkDate(result.update_date)) {
                     return this.dataRepository.fetchNetRepository(url);
                 }
 

@@ -18,12 +18,15 @@ import AboutPage from "./about/AboutPage";
 import MyWebSite from "./about/MyWebSite";
 
 export const AppStack = createStackNavigator({
+
     MyPage2: {
         screen: MyPage2
     },
+
     PopularPage: {
         screen: PopularPage
     },
+
 
     TrendingPage: {
         screen: TrendingPage

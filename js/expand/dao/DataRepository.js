@@ -6,8 +6,9 @@ import GitHubTrending from 'GitHubTrending';
 
 export var FLAG_STORAGE = {
     flag_popular: 'popular',
-    flag_trending: 'trending'
-}
+    flag_trending: 'trending',
+    flag_my: 'my'
+};
 export default class DataRepository {
 
     constructor(flag) {
@@ -80,12 +81,16 @@ export default class DataRepository {
                 fetch(url)
                     .then(response => response.json())
                     .then(result => {
-                        if (!result) {
+
+                        if (this.flag === FLAG_STORAGE.flag_my && result) {
+                            resolve(result)
+                            this.saveRepository(url, result);
+                        } else if (result && result.items) {
+                            resolve(result.items)
+                            this.saveRepository(url, result.items);
+                        }else{
                             reject(new Error('response is null'));
-                            return;
                         }
-                        resolve(result)
-                        this.saveRepository(url, result.items);
                     })
                     .catch(error => {
                         reject(error)
@@ -97,20 +102,19 @@ export default class DataRepository {
 
     saveRepository(url, items, callBack) {
         if (!url || !items) return;
-        let data = {
-            items: items,
-            update_date: new Date().getTime()
+        let data;
+        if (this.flag === FLAG_STORAGE.flag_my) {
+            data = {
+                item: items,
+                update_date: new Date().getTime()
+            }
+        } else {
+            data = {
+                items: items,
+                update_date: new Date().getTime()
+            }
         }
         AsyncStorage.setItem(url, JSON.stringify(data), callBack);
     }
 
-    checkDate(longTime) {
-        let cDate = new Date();
-        let tDate = new Date();
-        tDate.setTime(longTime);
-        if (cDate.getMonth() !== tDate.getMonth()) return false;
-        if (cDate.getDay() !== tDate.getDay()) return false;
-        if (cDate.getHours() - tDate.getHours() > 4) return false;
-        return true;
-    }
 }

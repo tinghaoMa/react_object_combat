@@ -191,7 +191,7 @@ class PopularTab extends React.Component {
                 DeviceEventEmitter.emit('showToast', '刷新成功');
                 this.items = result && result.items ? result.items : result ? result : [];
                 this.getFavoriteKeys();
-                if (result && result.update_date && !this.dataRepository.checkDate(result.update_date)) {
+                if (result && result.update_date && !Utils.checkDate(result.update_date)) {
                     return this.dataRepository.fetchNetRepository(url);
                 }
 

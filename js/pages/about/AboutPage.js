@@ -14,11 +14,18 @@ import ViewUtils from '../../utils/ViewUtils';
 import {MORE_MENU} from '../../common/MoreMenu';
 import GlobalStyles from "../../../res/styles/GlobalStyles";
 import AboutCommon from './AboutCommon';
-
+import config from '../../../res/data/config'
 export default class AboutPage extends React.Component {
     constructor(props) {
         super(props);
-        this.aboutCommon = new AboutCommon(this.props, (dic) => this.updateState(dic));
+        this.state = {
+            projectModels: [],
+        }
+        this.aboutCommon = new AboutCommon(this.props, (dic) => this.updateState(dic),config);
+    }
+
+    componentDidMount() {
+        this.aboutCommon.componentDidMount();
     }
 
     updateState(dic) {
@@ -75,6 +82,7 @@ export default class AboutPage extends React.Component {
 
     renderContentView() {
         return <View>
+            {this.aboutCommon.renderRepository(this.state.projectModels)}
             {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.WebSite),
                 require('../../../res/images/ic_computer.png'),
                 'WebSite',
