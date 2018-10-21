@@ -14,6 +14,7 @@ import TrendingPage from './TrendingPage';
 import WebViewPage from './WebViewPage';
 import MyPage2 from "./MyPage2";
 import TabPage from "./TabPage";
+import AboutPage from "./about/AboutPage";
 
 export const AppStack = createStackNavigator({
     MyPage2: {
@@ -32,6 +33,9 @@ export const AppStack = createStackNavigator({
     } ,
     TabPage: {
         screen: TabPage
+    },
+    AboutPage: {
+        screen: AboutPage
     }
 
 },{

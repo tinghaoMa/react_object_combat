@@ -110,7 +110,7 @@ export default class MyPage2 extends React.Component {
                 break;
         }
         const {navigation} = this.props;
-        navigation.navigate('TabPage',{
+        navigation.navigate('AboutPage',{
             tab:tab
         });
     }
