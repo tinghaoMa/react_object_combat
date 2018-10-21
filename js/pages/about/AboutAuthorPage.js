@@ -7,7 +7,8 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
-    Linking
+    Linking,
+    Clipboard
 } from 'react-native';
 
 import ViewUtils from '../../utils/ViewUtils';
@@ -113,6 +114,8 @@ export default class AboutAuthorPage extends React.Component {
                 break;
         }
         console.log(tab);
+        //设置剪切板文字
+        Clipboard.setString(JSON.stringify(tab));
     }
 
     toWebSite() {
