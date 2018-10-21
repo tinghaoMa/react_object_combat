@@ -15,6 +15,7 @@ import WebViewPage from './WebViewPage';
 import MyPage2 from "./MyPage2";
 import TabPage from "./TabPage";
 import AboutPage from "./about/AboutPage";
+import MyWebSite from "./about/MyWebSite";
 
 export const AppStack = createStackNavigator({
     MyPage2: {
@@ -36,6 +37,9 @@ export const AppStack = createStackNavigator({
     },
     AboutPage: {
         screen: AboutPage
+    },
+    MyWebSite: {
+        screen: MyWebSite
     }
 
 },{

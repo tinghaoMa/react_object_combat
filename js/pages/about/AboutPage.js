@@ -7,6 +7,7 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
+    Linking
 } from 'react-native';
 
 import ViewUtils from '../../utils/ViewUtils';
@@ -17,10 +18,10 @@ import AboutCommon from './AboutCommon';
 export default class AboutPage extends React.Component {
     constructor(props) {
         super(props);
-        this.aboutCommon = new AboutCommon(this.props,(dic)=>this.updateState(dic));
+        this.aboutCommon = new AboutCommon(this.props, (dic) => this.updateState(dic));
     }
 
-    updateState(dic){
+    updateState(dic) {
         this.setState(dic);
     }
 
@@ -42,11 +43,34 @@ export default class AboutPage extends React.Component {
             case MORE_MENU.About_Author:
                 break;
             case MORE_MENU.WebSite:
+                this.toWebSite();
                 break;
             case MORE_MENU.FeedBack:
+                this.feedBack();
                 break;
         }
         console.log(tab);
+    }
+
+    toWebSite() {
+        const {navigation} = this.props;
+        navigation.navigate('MyWebSite', {
+            url: 'https://github.com/tinghaoMa',
+            title: 'GitHub'
+        });
+    }
+
+    feedBack() {
+        let url = 'https://github.com/tinghaoMa';
+        Linking.canOpenURL(url)
+            .then(supported => {
+                if (!supported) {
+                    console.log('Can\'t handle url: ' + url);
+                } else {
+                    return Linking.openURL(url);
+                }
+            })
+            .catch(err => console.error('An error occurred', err));
     }
 
     renderContentView() {
