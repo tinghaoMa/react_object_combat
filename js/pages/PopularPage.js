@@ -19,6 +19,7 @@ import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../utils/Utils';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from "../utils/ViewUtils";
+import MoreMenu from "../common/MoreMenu";
 
 const URL = 'https://api.github.com/search/repositories?sort=stars&q=';
 var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
@@ -61,20 +62,27 @@ export default class PopularPage extends React.Component {
 
     renderRightButton() {
         return <TouchableOpacity
-                onPress={()=>{
-                    this.props.navigation.navigate('SearchPage');
-                }}
-            >
-                <View style={{marginRight:10,padding:5}}>
+            onPress={() => {
+                this.props.navigation.navigate('SearchPage');
+            }}
+        >
+            <View style={{marginRight: 10, padding: 5,flexDirection:'row',alignItems:'center'}}>
+                <Image
+                    style={{width: 24, height: 24, marginRight:5}}
+                    source={require('../../res/images/ic_search_white_48pt.png')}
+                />
+                {ViewUtils.getMoreButton(() => this.refs.moreMenu.open())}
+            </View>
 
-                    <Image
-                        style={{width: 24, height: 24}}
-                        source={require('../../res/images/ic_search_white_48pt.png')}
-                    />
+        </TouchableOpacity>;
 
-                </View>
-            </TouchableOpacity>;
+    }
 
+    renderMoreMenu() {
+        return <MoreMenu
+            ref={'moreMenu'}
+            menus={['自定义menu', '自定义menu', '自定义menu', '自定义menu hello']}
+            anchorView={this.refs.moreMenuButton}/>
     }
 
     render() {
@@ -92,10 +100,10 @@ export default class PopularPage extends React.Component {
                 }
             />
             {content}
+            {this.renderMoreMenu()}
             <Toast ref={toast => this.toast = toast}/>
         </View>;
     }
-
 
 
     renderContent() {
@@ -119,6 +127,11 @@ export default class PopularPage extends React.Component {
                 </PopularTab> : null;
             })}
         </ScrollableTabView>
+    }
+
+    onMoreButtonClick() {
+
+
     }
 }
 

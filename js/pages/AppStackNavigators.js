@@ -19,15 +19,21 @@ import MyWebSite from "./about/MyWebSite";
 import AboutAuthorPage from "./about/AboutAuthorPage";
 import FavoritePage from "./FavoritePage";
 import SearchPage from "./SearchPage";
+import MoreMenu from "../common/MoreMenu";
 
 export const AppStack = createStackNavigator({
+    PopularPage: {
+        screen: PopularPage
+    },
+    MoreMenu: {
+        screen: MoreMenu
+    },
+
+
     SearchPage: {
         screen: SearchPage
     },
 
-    PopularPage: {
-        screen: PopularPage
-    },
 
     AboutAuthorPage: {
         screen: AboutAuthorPage
