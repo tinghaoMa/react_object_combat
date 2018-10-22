@@ -23,6 +23,7 @@ import {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import Utils from "../utils/Utils";
 import ProjectModel from "../model/ProjectModel";
 import RepostoryCell from '../common/RepostoryCell'
+import makeCancelable from '../utils/Cancelable';
 
 const API_URL = 'https://api.github.com/search/repositories?sort=stars&q=';
 export default class SearchPage extends React.Component {
@@ -48,7 +49,8 @@ export default class SearchPage extends React.Component {
         });
         let url = this.getUrl(this.text);
         console.log(url);
-        fetch(url)
+        this.cancelable = makeCancelable(fetch(url));
+        this.cancelable.promise
             .then(response => response.json())
             .then(data => {
                 if (!this || !data || !data.items || data.items.length === 0) {
@@ -255,8 +257,13 @@ export default class SearchPage extends React.Component {
                 rightButtonText: '搜索',
                 isLoading: false,
             })
+            this.cancelable && this.cancelable.cancel();
         }
 
+    }
+
+    componentWillUnmount() {
+        this.cancelable && this.cancelable.cancel();
     }
 
     updateState(dic) {
