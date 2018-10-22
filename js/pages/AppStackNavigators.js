@@ -21,12 +21,13 @@ import FavoritePage from "./FavoritePage";
 import SearchPage from "./SearchPage";
 
 export const AppStack = createStackNavigator({
-    PopularPage: {
-        screen: PopularPage
-    },
     SearchPage: {
         screen: SearchPage
     },
+    PopularPage: {
+        screen: PopularPage
+    },
+
 
     AboutAuthorPage: {
         screen: AboutAuthorPage

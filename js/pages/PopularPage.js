@@ -20,7 +20,7 @@ import Utils from '../utils/Utils';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from "../utils/ViewUtils";
 
-const URL = 'https://api.github.com/search/repositories?s=stars&q=';
+const URL = 'https://api.github.com/search/repositories?sort=stars&q=';
 var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 export default class PopularPage extends React.Component {
