@@ -24,10 +24,10 @@ export const AppStack = createStackNavigator({
     SearchPage: {
         screen: SearchPage
     },
+
     PopularPage: {
         screen: PopularPage
     },
-
 
     AboutAuthorPage: {
         screen: AboutAuthorPage

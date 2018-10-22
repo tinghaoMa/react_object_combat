@@ -11,12 +11,14 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    ListView
+    ListView,
+    ActivityIndicator,
 } from 'react-native';
 import ViewUtils from "../utils/ViewUtils";
 import GlobalStyles from '../../res/styles/GlobalStyles';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import FavoriteDao from '../expand/dao/FavoriteDao';
+import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import Utils from "../utils/Utils";
 import ProjectModel from "../model/ProjectModel";
@@ -29,9 +31,12 @@ export default class SearchPage extends React.Component {
         super(props);
         const {navigation} = this.props;
         this.favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
+        this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
+        this.keys = [];
         this.state = {
             rightButtonText: '搜索',
             isLoading: false,
+            showBottomButton: false,
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         }
     }
@@ -39,6 +44,7 @@ export default class SearchPage extends React.Component {
     loadData() {
         this.updateState({
             isLoading: true,
+            showBottomButton: false,
         });
         let url = this.getUrl(this.text);
         console.log(url);
@@ -52,10 +58,37 @@ export default class SearchPage extends React.Component {
                 }
                 this.items = data.items;
                 this.getFavoriteKeys();
+                let exist = this.checkKeyIsExist(this.keys, this.text);
+                if (!exist) {
+                    this.updateState({
+                        showBottomButton: true,
+                    })
+                }
             })
-            .catch(e=>{
+            .catch(e => {
                 this.updateState({isLoading: false, rightButtonText: '搜索'})
             })
+    }
+
+    componentDidMount() {
+        this.initKeys();
+    }
+
+    async initKeys() {
+        this.keys = await this.languageDao.fetch()
+    }
+
+    checkKeyIsExist(keys, key) {
+        if (keys && key) {
+            for (let i = 0; i < keys.length; i++) {
+                key = key.toLowerCase();
+                if (key === keys[i].toLowerCase()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
     }
 
     getFavoriteKeys() {
@@ -80,7 +113,7 @@ export default class SearchPage extends React.Component {
         this.updateState({
             isLoading: false,
             dataSource: this.getDataSource(projectModels),
-            rightButtonText: '搜索'
+            rightButtonText: '搜索',
         })
     }
 
@@ -98,13 +131,39 @@ export default class SearchPage extends React.Component {
             statusBar = <View style={[styles.status, {backgroundColor: '#2196f3'}]}/>
 
         }
+        let indicatorView = this.state.isLoading ? <ActivityIndicator
+            animating={this.state.isLoading}
+            size="large"
+            color="#0000ff"
+            style={styles.centerInScreen}
+        /> : null;
+
+
+        let listView = !this.state.isLoading ? <ListView
+            dataSource={this.state.dataSource}
+            renderRow={(data) => this._renderRow(data)}
+        /> : null;
+
+        let content = <View style={{flex: 1}}>
+            {indicatorView}
+            {listView}
+        </View>
+
+
+        let bottomButton = this.state.showBottomButton ? <TouchableOpacity
+            style={styles.bottomButton}
+        >
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={styles.welcome}>添加标签</Text>
+            </View>
+
+        </TouchableOpacity> : null;
+
         return <View style={GlobalStyles.root_container}>
             {statusBar}
             {this.rendNavBar()}
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={(data) => this._renderRow(data)}
-            />
+            {content}
+            {bottomButton}
             <Toast ref={'toast'}/>
         </View>
     }
@@ -118,6 +177,7 @@ export default class SearchPage extends React.Component {
             onSelect={() => this.onSelect(projectModel)}
             projectModel={projectModel}/>
     }
+
     onSelect(projectModel) {
         const {navigation} = this.props;
         navigation.navigate('WebViewPage', {
@@ -156,7 +216,6 @@ export default class SearchPage extends React.Component {
         let inputView = <TextInput
             ref={'input'}
             style={styles.input}
-            defaultValue={'js'}
             onChangeText={text => this.text = text}
         />;
         let rightButton = <TouchableOpacity
@@ -206,24 +265,20 @@ export default class SearchPage extends React.Component {
     }
 }
 
-class FavoriteTab extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-    }
-
-    render() {
-        return <View style={styles.container}>
-
-
-        </View>
-    }
-
-
-}
-
 const styles = StyleSheet.create({
+    bottomButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#2196f3',
+        opacity: 0.9,
+        height: 40,
+        position: 'absolute',
+        left: 10,
+        top: GlobalStyles.window_height - 80,
+        right: 10,
+        borderRadius: 3,
+
+    },
     container: {
         flex: 1,
     },
@@ -244,5 +299,10 @@ const styles = StyleSheet.create({
     },
     status: {
         height: 20
+    },
+    centerInScreen: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
     }
 });
