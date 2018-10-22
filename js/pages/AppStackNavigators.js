@@ -18,8 +18,19 @@ import AboutPage from "./about/AboutPage";
 import MyWebSite from "./about/MyWebSite";
 import AboutAuthorPage from "./about/AboutAuthorPage";
 import FavoritePage from "./FavoritePage";
+import SearchPage from "./SearchPage";
 
 export const AppStack = createStackNavigator({
+    PopularPage: {
+        screen: PopularPage
+    },
+    SearchPage: {
+        screen: SearchPage
+    },
+
+    AboutAuthorPage: {
+        screen: AboutAuthorPage
+    },
     FavoritePage: {
         screen: FavoritePage
     },
@@ -27,11 +38,6 @@ export const AppStack = createStackNavigator({
     MyPage2: {
         screen: MyPage2
     },
-
-    PopularPage: {
-        screen: PopularPage
-    },
-
 
     TrendingPage: {
         screen: TrendingPage
@@ -46,9 +52,7 @@ export const AppStack = createStackNavigator({
     AboutPage: {
         screen: AboutPage
     },
-    AboutAuthorPage: {
-        screen: AboutAuthorPage
-    },
+
     MyWebSite: {
         screen: MyWebSite
     }

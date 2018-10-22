@@ -5,7 +5,9 @@ import {
     View,
     ListView,
     RefreshControl,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import RepostoryCell from '../common/RepostoryCell'
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
@@ -15,6 +17,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import ProjectModel from '../model/ProjectModel'
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../utils/Utils';
+import NavigationBar from '../common/NavigationBar';
+import ViewUtils from "../utils/ViewUtils";
 
 const URL = 'https://api.github.com/search/repositories?s=stars&q=';
 var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
@@ -55,13 +59,43 @@ export default class PopularPage extends React.Component {
             )
     }
 
+    renderRightButton() {
+        return <TouchableOpacity
+                onPress={()=>{
+                    this.props.navigation.navigate('SearchPage');
+                }}
+            >
+                <View style={{marginRight:10,padding:5}}>
+
+                    <Image
+                        style={{width: 24, height: 24}}
+                        source={require('../../res/images/ic_search_white_48pt.png')}
+                    />
+
+                </View>
+            </TouchableOpacity>;
+
+    }
+
     render() {
         let content = this.state.language.length > 0 ? this.renderContent() : null;
         return <View style={styles.container}>
+            <NavigationBar
+                leftButton={
+                    ViewUtils.getButton(require('../../res/images/ic_arrow_back_white_36pt.png'), () => {
+                    })
+
+                }
+                title={'最热'}
+                rightButton={
+                    this.renderRightButton()
+                }
+            />
             {content}
             <Toast ref={toast => this.toast = toast}/>
-        </View>
+        </View>;
     }
+
 
 
     renderContent() {
@@ -120,7 +154,7 @@ class PopularTab extends React.Component {
     onSelect(projectModel) {
         const {navigation} = this.props;
         navigation.navigate('WebViewPage', {
-            refresh:()=>{
+            refresh: () => {
                 this._refresh();
             },
             projectModel: projectModel,
@@ -221,9 +255,9 @@ class PopularTab extends React.Component {
     onFavorite(item, isFavorite) {
         // console.log(`item =${JSON.stringify(item)}
         // isFavorite =${isFavorite}`);
-        if(isFavorite){
-            favoriteDao.saveFavoriteItem(item.id.toString(),JSON.stringify(item))
-        }else{
+        if (isFavorite) {
+            favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item))
+        } else {
             favoriteDao.removeFavoriteItem(item.id.toString());
         }
     }

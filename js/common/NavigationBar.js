@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         backgroundColor:'#2196f3',
         height: Platform.OS==='ios'?NAVBAR_HEIGHT_IOS:NAVBAR_HEIGHT_ANDROID,
-        flexDirection:'row'
+        flexDirection:'row',
     },
     titleViewContainer:{
         justifyContent:'center',
