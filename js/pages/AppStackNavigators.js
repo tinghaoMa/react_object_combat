@@ -20,8 +20,16 @@ import AboutAuthorPage from "./about/AboutAuthorPage";
 import FavoritePage from "./FavoritePage";
 import SearchPage from "./SearchPage";
 import MoreMenu from "../common/MoreMenu";
+import CustomThemePage from "./CustomThemePage";
 
 export const AppStack = createStackNavigator({
+    MyPage2: {
+        screen: MyPage2
+    },
+
+    CustomThemePage: {
+        screen: CustomThemePage
+    },
     PopularPage: {
         screen: PopularPage
     },
@@ -42,9 +50,6 @@ export const AppStack = createStackNavigator({
         screen: FavoritePage
     },
 
-    MyPage2: {
-        screen: MyPage2
-    },
 
     TrendingPage: {
         screen: TrendingPage

@@ -10,18 +10,23 @@ import {
     View,
     Image,
     ScrollView,
-    TouchableHighlight,
+    TouchableHighlight, ViewPropTypes,
 } from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
 import {MORE_MENU} from '../common/MoreMenu';
 import GlobalStyles from '../../res/styles/GlobalStyles';
 import ViewUtils from '../../js/utils/ViewUtils';
+import PropTypes from "prop-types";
+import CustomThemePage from "./CustomThemePage";
 
 export default class MyPage2 extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            customThemeView: false
+        }
     }
 
     render() {
@@ -80,6 +85,7 @@ export default class MyPage2 extends React.Component {
                 <View style={GlobalStyles.line}/>
                 {this.getItem(MORE_MENU.About_Author, require('../../res/images/ic_insert_emoticon.png'), '关于作者')}
             </ScrollView>
+            {this.renderCustomThemePage()}
         </View>
     }
 
@@ -93,26 +99,36 @@ export default class MyPage2 extends React.Component {
     }
 
     _onClick(tab) {
+        const {navigation} = this.props;
         switch (tab) {
             case MORE_MENU.Custom_Language:
-                break;
             case MORE_MENU.Sort_Language:
-                break;
             case MORE_MENU.Custom_Key:
-                break;
             case MORE_MENU.Sort_Key:
-                break;
             case MORE_MENU.About_Author:
-                break;
             case MORE_MENU.About:
+                navigation.navigate('AboutPage', {
+                    tab: tab
+                })
                 break;
             case MORE_MENU.Custom_Theme:
+                this.setState({
+                    customThemeView: true,
+                })
                 break;
         }
-        const {navigation} = this.props;
-        navigation.navigate('AboutPage',{
-            tab:tab
-        });
+
+    }
+
+    renderCustomThemePage() {
+        return <CustomThemePage
+            visible={this.state.customThemeView}
+            onClose={() => {
+                this.setState({
+                    customThemeView: false,
+                })
+            }}
+        />
     }
 }
 
