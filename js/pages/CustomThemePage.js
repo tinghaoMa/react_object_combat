@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import ThemeFactory, {ThemeFlags} from '../../res/styles/ThemeFactory'
+import ThemeDao from '../expand/dao/ThemeDao';
 
 export default class CustomThemePage extends React.Component {
 
@@ -22,6 +23,7 @@ export default class CustomThemePage extends React.Component {
         super(props);
         const {navigation} = this.props;
         console.log(this.props.visible);
+        this.themeDao = new ThemeDao();
     }
 
     render() {
@@ -51,7 +53,7 @@ export default class CustomThemePage extends React.Component {
 
     renderThemeItems() {
         let views = [];
-        for (let i = 0, keys = Object.keys(ThemeFlags), l = keys.length; i < l; i+=3) {
+        for (let i = 0, keys = Object.keys(ThemeFlags), l = keys.length; i < l; i += 3) {
             let key1 = keys[i], key2 = keys[i + 1], key3 = keys[i + 3];
             views.push(<View key={i} style={{flexDirection: 'row'}}>
                 {this.getThemeItem(key1)}
@@ -65,7 +67,7 @@ export default class CustomThemePage extends React.Component {
     getThemeItem(themeKey) {
         return <TouchableHighlight
             underlayColor={'white'}
-            onPress={()=>this.onSelectTheme(themeKey)}
+            onPress={() => this.onSelectThemeItem(themeKey)}
             style={{flex: 1}}>
             <View style={[styles.themeItem, {backgroundColor: ThemeFlags[themeKey]}]}>
                 <Text style={styles.themeText}>
@@ -76,8 +78,9 @@ export default class CustomThemePage extends React.Component {
         </TouchableHighlight>
     }
 
-    onSelectTheme(themeKey) {
+    onSelectThemeItem(themeKey) {
         this.props.onClose();
+        this.themeDao.save(ThemeFlags[themeKey]);
     }
 }
 

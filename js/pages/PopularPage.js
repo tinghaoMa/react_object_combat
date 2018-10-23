@@ -30,9 +30,10 @@ export default class PopularPage extends React.Component {
         super(props);
         const {navigation} = this.props;
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
-
+        this.theme = navigation.getParam('theme');
         this.state = {
             language: [],
+            theme: this.theme
         }
     }
 
@@ -66,9 +67,9 @@ export default class PopularPage extends React.Component {
                 this.props.navigation.navigate('SearchPage');
             }}
         >
-            <View style={{marginRight: 10, padding: 5,flexDirection:'row',alignItems:'center'}}>
+            <View style={{marginRight: 10, padding: 5, flexDirection: 'row', alignItems: 'center'}}>
                 <Image
-                    style={{width: 24, height: 24, marginRight:5}}
+                    style={{width: 24, height: 24, marginRight: 5}}
                     source={require('../../res/images/ic_search_white_48pt.png')}
                 />
                 {ViewUtils.getMoreButton(() => this.refs.moreMenu.open())}
@@ -89,10 +90,11 @@ export default class PopularPage extends React.Component {
         let content = this.state.language.length > 0 ? this.renderContent() : null;
         return <View style={styles.container}>
             <NavigationBar
+                style={this.theme.styles.navBar}
                 leftButton={
                     ViewUtils.getButton(require('../../res/images/ic_arrow_back_white_36pt.png'), () => {
+                        this.props.navigation.pop();
                     })
-
                 }
                 title={'最热'}
                 rightButton={

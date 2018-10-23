@@ -17,15 +17,16 @@ import NavigationBar from '../common/NavigationBar';
 import {MORE_MENU} from '../common/MoreMenu';
 import GlobalStyles from '../../res/styles/GlobalStyles';
 import ViewUtils from '../../js/utils/ViewUtils';
-import PropTypes from "prop-types";
 import CustomThemePage from "./CustomThemePage";
+import ThemeDao from '../expand/dao/ThemeDao';
 
 export default class MyPage2 extends React.Component {
 
     constructor(props) {
         super(props);
+        this.themeDao = new ThemeDao();
         this.state = {
-            customThemeView: false
+            customThemeView: false,
         }
     }
 
@@ -106,6 +107,14 @@ export default class MyPage2 extends React.Component {
             case MORE_MENU.Custom_Key:
             case MORE_MENU.Sort_Key:
             case MORE_MENU.About_Author:
+                this.themeDao.getTheme()
+                    .then(theme => {
+                        this.theme = theme;
+                        navigation.navigate('PopularPage',{
+                            theme: this.theme,
+                        })
+                    })
+                break;
             case MORE_MENU.About:
                 navigation.navigate('AboutPage', {
                     tab: tab
@@ -130,6 +139,8 @@ export default class MyPage2 extends React.Component {
             }}
         />
     }
+
+
 }
 
 
