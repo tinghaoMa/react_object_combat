@@ -11,6 +11,7 @@ import {
     ScrollView,
     StyleSheet,
     TouchableHighlight,
+    DeviceEventEmitter
 } from 'react-native';
 
 import ThemeFactory, {ThemeFlags} from '../../res/styles/ThemeFactory'
@@ -81,6 +82,8 @@ export default class CustomThemePage extends React.Component {
     onSelectThemeItem(themeKey) {
         this.props.onClose();
         this.themeDao.save(ThemeFlags[themeKey]);
+        console.log('onSelectThemeItem  DeviceEventEmitter.emit');
+        DeviceEventEmitter.emit('updateTheme', ThemeFactory.createTheme(ThemeFlags[themeKey]));
     }
 }
 

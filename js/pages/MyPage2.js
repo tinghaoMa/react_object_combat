@@ -19,21 +19,24 @@ import GlobalStyles from '../../res/styles/GlobalStyles';
 import ViewUtils from '../../js/utils/ViewUtils';
 import CustomThemePage from "./CustomThemePage";
 import ThemeDao from '../expand/dao/ThemeDao';
+import BaseComponent from './BaseComponent';
 
-export default class MyPage2 extends React.Component {
+export default class MyPage2 extends BaseComponent {
 
     constructor(props) {
         super(props);
         this.themeDao = new ThemeDao();
         this.state = {
             customThemeView: false,
+            theme: null
         }
     }
 
     render() {
         let navNar = <NavigationBar
+            style={this.state.theme ? this.state.theme.styles.navBar : {backgroundColor: 'red'}}
             title={'我的'}
-        />
+        />;
         return <View style={GlobalStyles.root_container}>
             {navNar}
             <ScrollView>
@@ -110,7 +113,7 @@ export default class MyPage2 extends React.Component {
                 this.themeDao.getTheme()
                     .then(theme => {
                         this.theme = theme;
-                        navigation.navigate('PopularPage',{
+                        navigation.navigate('PopularPage', {
                             theme: this.theme,
                         })
                     })
@@ -138,6 +141,22 @@ export default class MyPage2 extends React.Component {
                 })
             }}
         />
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+        super.componentWillUnmount();
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount');
+        super.componentDidMount();
+        this.themeDao.getTheme()
+            .then(theme => {
+                this.setState({
+                    theme: theme,
+                })
+            })
     }
 
 
