@@ -20,6 +20,7 @@ import ViewUtils from '../../js/utils/ViewUtils';
 import CustomThemePage from "./CustomThemePage";
 import ThemeDao from '../expand/dao/ThemeDao';
 import BaseComponent from './BaseComponent';
+import BackPressComponent from './BackPressComponent';
 
 export default class MyPage2 extends BaseComponent {
 
@@ -30,6 +31,7 @@ export default class MyPage2 extends BaseComponent {
             customThemeView: false,
             theme: null
         }
+        this.backPress=new BackPressComponent({backPress: (e) => this.onBackPress(e)})
     }
 
     render() {
@@ -146,6 +148,7 @@ export default class MyPage2 extends BaseComponent {
     componentWillUnmount() {
         console.log('componentWillUnmount');
         super.componentWillUnmount();
+        this.backPress.componentWillUnmount();
     }
 
     componentDidMount() {
@@ -157,9 +160,20 @@ export default class MyPage2 extends BaseComponent {
                     theme: theme,
                 })
             })
+
+        this.backPress.componentDidMount();
     }
 
+    onBackPress(e) {
+        this.onBack();
 
+        
+        return false;
+    }
+
+    onBack() {
+        console.log('onBack')
+    }
 }
 
 
