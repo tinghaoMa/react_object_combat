@@ -21,8 +21,12 @@ import FavoritePage from "./FavoritePage";
 import SearchPage from "./SearchPage";
 import MoreMenu from "../common/MoreMenu";
 import CustomThemePage from "./CustomThemePage";
+import TestPage from "./TestPage";
 
 export const AppStack = createStackNavigator({
+    TestPage: {
+        screen: TestPage
+    },
     MyPage2: {
         screen: MyPage2
     },
